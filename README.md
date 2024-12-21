@@ -104,3 +104,19 @@ System.out.println("Inside Runnable")
 ```
 
 As lambdas oferecem uma forma mais concisa e legível de implementar essas interfaces, tornando o código mais enxuto e fácil de entender.
+
+### Interfaces funcionais 
+Existem desde o java 1.8
+
+A "interface" funcional (SAM) é uma "interface" que tem apenas um método abstrato
+
+Ex 
+@FunctionalInterface:
+Essa anotação foi introduzida como parte do JDK 1.8.
+Anotação opcional para sinalizar que a "interface" é uma "Interface" Funcional
+
+### Interfaces funcionais no Java8
+
+Consumer - BiConsumer
+Predicate - BiPredicate
+Function - BiFunction, UnaryOperator, BinaryOperator
