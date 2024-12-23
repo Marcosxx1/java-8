@@ -25,6 +25,7 @@ public class BiConsumerExample {
         listStudent.forEach((student) -> studentNameAndActivities.accept(student.getName(), student.getActivities()));
     }
 
+
     public static void main(String[] args) {
 
         BiConsumer<String, String> biConsumer = (a, b) -> {
@@ -50,5 +51,7 @@ public class BiConsumerExample {
         biconsumerMultiplication.andThen(biconsumerDivision).accept(3.0, 9.0);
 
         printUserNameAndUserActivities();
+
+
     }
 }

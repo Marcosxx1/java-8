@@ -39,6 +39,7 @@ public class PredicateAndConsumerExample {
 }
 
 
-/*    BiPredicate<Student, Student> test = ((studentGpa, studentGrade) ->
-            studentGpa.getGpa() >= 3 && studentGrade.getGradeLevel() >= 3
+/*
+BiPredicate<Integer, Double> test = ((studentGpa, studentGrade) ->
+            studentGpa >= 3.9 && studentGrade >= 3
     );*/
