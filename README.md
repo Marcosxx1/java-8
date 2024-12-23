@@ -304,139 +304,69 @@ public static void main(String[] args) {
 }
 ```
 
+
 ## Predicate
-Com Predicate podemso usar de duas formas:
-### Indireto
-Definindo os Predicate<Object> value; e utilizando eles ao invés de utilizar diretamenta no .stream()
+A interface `Predicate` em Java é usada para representar uma função que avalia um argumento e retorna um valor booleano. Ela é amplamente utilizada com streams e coleções para filtragem e composição lógica.
+
+### Usos do `Predicate`
+
+#### 1. **Definido previamente (uso indireto)**
+
+Os predicados podem ser definidos como variáveis estáticas ou locais e reutilizados em várias partes do código. Veja um exemplo:
 
 ```java
-package com.technical.functionalInterfaces;
+static Predicate<Student> studentPredicateGrade = student -> student.getGradeLevel() >= 3;
+static Predicate<Student> studentPredicateGPA = student -> student.getGpa() >= 4;
 
-import com.technical.data.Student;
-import com.technical.data.StudentDataBase;
-
-import java.util.List;
-import java.util.function.Predicate;
-
-public class PredicateStudentExample {
-
-    static Predicate<Student> studentPredicateGrade = (student -> student.getGradeLevel() >= 3);
-    static Predicate<Student> studentPredicateGPA = (student -> student.getGpa() >= 4);
-
-    static Predicate<Student> studentStartsWithJ = (student -> student.getName().startsWith("J"));
-
-    static List<Student> listOfStudents = StudentDataBase.getAllStudents();
-
-    public static void filterStudentsByGradeLevel() {
-        listOfStudents.forEach(student -> {
-
-            if (studentPredicateGrade.test(student)) {
-                System.out.println("Students with grade >= 3: " + student);
-            }
-        });
-    }
-
-    public static void filterStudentsByGradeGPA() {
-        listOfStudents.forEach(student -> {
-
-            if (studentPredicateGPA.test(student)) {
-                System.out.println("Students with GPA >= 4: " + student);
-            }
-        });
-    }
-
-    public static void filterStudentByGradeLevelAndGpa(){
-        listOfStudents.forEach(student -> {
-            if(studentPredicateGrade.and(studentPredicateGPA).test(student)){
-                System.out.println("Students with grade >= 3 AND GPA >= 4: " + student);
-            }
-        });
-    }
-
-    public static void filterStudentWithNameStartingWithJAndGradeAndGpa(){
-        listOfStudents.forEach(student -> {
-
-            if(studentStartsWithJ.and(studentPredicateGPA).and(studentPredicateGrade).test(student)){
-                System.out.println("Students with grade >= 3 AND GPA >= 4 AND name starts with J: " + student);
-            }
-        });
-    }
-
-    public static void main(String[] args) {
-
-        filterStudentsByGradeLevel();
-        filterStudentsByGradeGPA();
-        filterStudentByGradeLevelAndGpa();
-        filterStudentWithNameStartingWithJAndGradeAndGpa();
-    }
-}
+listOfStudents.stream()
+    .filter(studentPredicateGrade.and(studentPredicateGPA)) // Reutilização de predicados
+    .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
 ```
 
-### diretamente
+- **Vantagens**:
+    - Reutilização: Pode ser usado em diferentes partes do código.
+    - Composição: Permite combinar predicados com os métodos `and`, `or` ou `negate`.
 
+#### 2. **Usado diretamente (expressão inline)**
 
-### **Definição e uso direto**
+Você pode usar expressões lambda diretamente no método `filter`:
 
-1. **Usando um predicado previamente definido:**
+```java
+listOfStudents.stream()
+    .filter(student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4) // Expressão direta
+    .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
+```
 
-   ```java
-   Predicate<Student> studentPredicateGrade = student -> student.getGradeLevel() >= 3;
-   Predicate<Student> studentPredicateGPA = student -> student.getGpa() >= 4;
-
-   listOfStudents.stream()
-       .filter(studentPredicateGrade.and(studentPredicateGPA))
-       .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
-   ```
-
-  - Aqui, você define os predicados (`studentPredicateGrade` e `studentPredicateGPA`) antes de usá-los.
-  - **Vantagem:** Reutilização. Os predicados podem ser usados em outras partes do código.
-
-2. **Usando uma expressão diretamente no **`stream()`**:**
-
-   ```java
-   listOfStudents.stream()
-       .filter(student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4)
-       .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
-   ```
-
-  - Aqui, a expressão `student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4` é passada diretamente ao método `filter`.
-  - **Vantagem:** Código mais curto e direto.
+- **Vantagens**:
+    - Simplicidade: Ideal para condições que serão usadas uma única vez.
+    - Legibilidade local: O código fica direto e fácil de entender.
 
 ---
 
-### **A expressão direta é um **`predicate`**?**
+### **A expressão direta é um `Predicate`?**
 
-Sim, a expressão direta `student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4`  **é considerada um**  , porque ela:
+Sim! Uma expressão lambda como `student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4` é considerada um `Predicate`. Isso porque ela:
 
 - Recebe um único argumento (`Student`).
 - Retorna um valor booleano.
-- Se alinha com a assinatura funcional da interface `Predicate<T>`.
+- Atende à assinatura funcional da interface `Predicate<T>`.
 
-Em Java, lambdas são compatíveis com interfaces funcionais, então essa expressão funciona como um `Predicate`.
+Em Java, expressões lambda podem ser usadas onde interfaces funcionais são esperadas, como no método `filter`, que aceita um `Predicate<T>`.
 
 ---
 
-### **Quando usar predicados definidos versus expressões diretas**
+### **Quando usar predicados definidos versus expressões diretas?**
 
-#### Use predicados definidos quando:
-
-1. **Reutilização:** A mesma condição será usada em diferentes partes do código.
-2. **Composição:** Você planeja combinar condições usando métodos como `and`, `or` ou `negate`.
+#### Use **predicados definidos** quando:
+1. **Reutilização:** Você usará a mesma lógica em várias partes do código.
+2. **Composição:** Combinações complexas de condições são necessárias.
    ```java
-   Predicate<Student> studentPredicate = studentPredicateGrade.and(studentPredicateGPA);
+   Predicate<Student> complexCondition = studentPredicateGrade.and(studentPredicateGPA).or(studentStartsWithJ);
    ```
 
-#### Use expressões diretas quando:
-
-1. **Simplicidade:** A condição é usada apenas uma vez, e escrever diretamente é mais legível.
-2. **Legibilidade local:** Se o código for curto e simples, uma expressão direta pode ser mais clara.
-
----
-
-### **Código de Exemplo: Predicados em Uso**
-
-
-
+#### Use **expressões diretas** quando:
+1. **Simplicidade:** A condição será usada uma única vez.
+2. **Legibilidade local:** O código é curto e simples.
 
 
 
