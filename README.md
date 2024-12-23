@@ -304,7 +304,141 @@ public static void main(String[] args) {
 }
 ```
 
-## Bipredicate
+## Predicate
+Com Predicate podemso usar de duas formas:
+### Indireto
+Definindo os Predicate<Object> value; e utilizando eles ao invés de utilizar diretamenta no .stream()
+
+```java
+package com.technical.functionalInterfaces;
+
+import com.technical.data.Student;
+import com.technical.data.StudentDataBase;
+
+import java.util.List;
+import java.util.function.Predicate;
+
+public class PredicateStudentExample {
+
+    static Predicate<Student> studentPredicateGrade = (student -> student.getGradeLevel() >= 3);
+    static Predicate<Student> studentPredicateGPA = (student -> student.getGpa() >= 4);
+
+    static Predicate<Student> studentStartsWithJ = (student -> student.getName().startsWith("J"));
+
+    static List<Student> listOfStudents = StudentDataBase.getAllStudents();
+
+    public static void filterStudentsByGradeLevel() {
+        listOfStudents.forEach(student -> {
+
+            if (studentPredicateGrade.test(student)) {
+                System.out.println("Students with grade >= 3: " + student);
+            }
+        });
+    }
+
+    public static void filterStudentsByGradeGPA() {
+        listOfStudents.forEach(student -> {
+
+            if (studentPredicateGPA.test(student)) {
+                System.out.println("Students with GPA >= 4: " + student);
+            }
+        });
+    }
+
+    public static void filterStudentByGradeLevelAndGpa(){
+        listOfStudents.forEach(student -> {
+            if(studentPredicateGrade.and(studentPredicateGPA).test(student)){
+                System.out.println("Students with grade >= 3 AND GPA >= 4: " + student);
+            }
+        });
+    }
+
+    public static void filterStudentWithNameStartingWithJAndGradeAndGpa(){
+        listOfStudents.forEach(student -> {
+
+            if(studentStartsWithJ.and(studentPredicateGPA).and(studentPredicateGrade).test(student)){
+                System.out.println("Students with grade >= 3 AND GPA >= 4 AND name starts with J: " + student);
+            }
+        });
+    }
+
+    public static void main(String[] args) {
+
+        filterStudentsByGradeLevel();
+        filterStudentsByGradeGPA();
+        filterStudentByGradeLevelAndGpa();
+        filterStudentWithNameStartingWithJAndGradeAndGpa();
+    }
+}
+```
+
+### diretamente
+
+
+### **Definição e uso direto**
+
+1. **Usando um predicado previamente definido:**
+
+   ```java
+   Predicate<Student> studentPredicateGrade = student -> student.getGradeLevel() >= 3;
+   Predicate<Student> studentPredicateGPA = student -> student.getGpa() >= 4;
+
+   listOfStudents.stream()
+       .filter(studentPredicateGrade.and(studentPredicateGPA))
+       .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
+   ```
+
+  - Aqui, você define os predicados (`studentPredicateGrade` e `studentPredicateGPA`) antes de usá-los.
+  - **Vantagem:** Reutilização. Os predicados podem ser usados em outras partes do código.
+
+2. **Usando uma expressão diretamente no **`stream()`**:**
+
+   ```java
+   listOfStudents.stream()
+       .filter(student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4)
+       .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
+   ```
+
+  - Aqui, a expressão `student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4` é passada diretamente ao método `filter`.
+  - **Vantagem:** Código mais curto e direto.
+
+---
+
+### **A expressão direta é um **`predicate`**?**
+
+Sim, a expressão direta `student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4`  **é considerada um**  , porque ela:
+
+- Recebe um único argumento (`Student`).
+- Retorna um valor booleano.
+- Se alinha com a assinatura funcional da interface `Predicate<T>`.
+
+Em Java, lambdas são compatíveis com interfaces funcionais, então essa expressão funciona como um `Predicate`.
+
+---
+
+### **Quando usar predicados definidos versus expressões diretas**
+
+#### Use predicados definidos quando:
+
+1. **Reutilização:** A mesma condição será usada em diferentes partes do código.
+2. **Composição:** Você planeja combinar condições usando métodos como `and`, `or` ou `negate`.
+   ```java
+   Predicate<Student> studentPredicate = studentPredicateGrade.and(studentPredicateGPA);
+   ```
+
+#### Use expressões diretas quando:
+
+1. **Simplicidade:** A condição é usada apenas uma vez, e escrever diretamente é mais legível.
+2. **Legibilidade local:** Se o código for curto e simples, uma expressão direta pode ser mais clara.
+
+---
+
+### **Código de Exemplo: Predicados em Uso**
+
+
+
+
+
 
 Predicate - BiPredicate
 Function - BiFunction, UnaryOperator, BinaryOperator
