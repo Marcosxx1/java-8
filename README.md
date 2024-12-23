@@ -98,8 +98,8 @@ Lembrando que quando é apenas uma declaração podemos utilizar sem as {}, Ex:
 Mais que uma declaração precisamos das chames
 ```java
 Runnable runnable = () -> {
-System.out.println("Inside Runnable")
-System.out.println("Inside Runnable")
+System.out.println("Inside Runnable");
+System.out.println("Inside Runnable");
 };
 ```
 
@@ -116,7 +116,195 @@ Essa anotação foi introduzida como parte do JDK 1.8.
 Anotação opcional para sinalizar que a "interface" é uma "Interface" Funcional
 
 ### Interfaces funcionais no Java8
+ 
+## Consumer:
+## Objetivo
 
-Consumer - BiConsumer
+Demonstrar como:
+
+1. Definir consumidores personalizados para executar ações específicas em objetos.
+2. Encadear consumidores usando o método `andThen` para realizar operações sequenciais.
+3. Filtrar elementos de uma coleção com base em condições específicas antes de aplicar consumidores.
+
+## Conceitos Teóricos
+
+### Interface `Consumer`
+A interface funcional `Consumer<T>` é usada para definir operações que processam um único argumento sem retornar valores. É frequentemente empregada em APIs de coleção, como no método `forEach`, para realizar ações sobre elementos de forma declarativa.
+
+- **Método funcional:** `void accept(T t)`
+  - Recebe um argumento do tipo `T` e executa uma ação definida no corpo da implementação.
+
+- **Encadeamento:** O método padrão `andThen` permite compor dois consumidores, executando ambos na sequência sobre o mesmo argumento.
+  ```java
+  default Consumer<T> andThen(Consumer<? super T> after) {
+      Objects.requireNonNull(after);
+      return (T t) -> { accept(t); after.accept(t); };
+  }
+  ```
+
+### Uso no Método `forEach`
+O método `forEach` é uma operação terminal fornecida pelas coleções e streams em Java. Ele aceita um `Consumer` e executa a ação definida sobre cada elemento da coleção ou stream.
+```java
+void forEach(Consumer<? super T> action);
+```
+
+### Aplicações Práticas
+- **Impressão de valores.**
+- **Modificação de elementos.**
+- **Registros de log ou operações auxiliares.**
+
+## Estrutura do Código
+
+### Definições Importantes
+```java
+  public static List<Student> studentList = StudentDataBase.getAllStudents();
+    public static Consumer<Student> consumerStudentName = (student) -> System.out.println(student.getName());
+    public static Consumer<Student> consumerStudentActivities = (student) -> System.out.println(student.getActivities());
+```
+- **`studentList`**: Uma lista de objetos do tipo `Student`, representando uma coleção a ser processada.
+- **Consumidores:**
+  - `consumerStudentName`: Imprime o nome do estudante.
+  - `consumerStudentActivities`: Imprime as atividades do estudante.
+
+### Métodos
+
+#### `printName`
+Aplica o consumidor `consumerStudentName` para imprimir o nome de todos os estudantes.
+```java
+public static void printName() {
+    studentList.forEach(consumerStudentName);
+}
+```
+
+#### `printNameAndActivities`
+Encadeia os consumidores `consumerStudentName` e `consumerStudentActivities` para imprimir nome e atividades de cada estudante.
+```java
+public static void printNameAndActivities() {
+    studentList.forEach(consumerStudentName.andThen(consumerStudentActivities));
+}
+```
+
+#### `printNameAndActivitiesWithFilter`
+Filtra estudantes com base em condições específicas (nível >= 3 e GPA >= 4) e, em seguida, aplica os consumidores encadeados.
+```java
+public static void printNameAndActivitiesWithFilter() {
+    studentList.forEach(student -> {
+        if (student.getGradeLevel() >= 3 && student.getGpa() >= 4) {
+            consumerStudentName.andThen(consumerStudentActivities).accept(student);
+        }
+    });
+}
+```
+
+### Método Principal
+Demonstra o uso de um consumidor simples, além de executar os métodos definidos para ilustrar as funcionalidades implementadas.
+```java
+public static void main(String[] args) {
+    Consumer<String> c1 = (s) -> System.out.println(s.toUpperCase());
+    c1.accept("java8");
+
+    printName();
+    printNameAndActivities();
+    printNameAndActivitiesWithFilter();
+}
+```
+ ## BiConsumer:
+
+Este exemplo explora o uso da interface funcional `BiConsumer` do Java 8, que faz parte do pacote `java.util.function`. A interface `BiConsumer` representa uma operação que aceita dois argumentos de entrada e não retorna nenhum resultado. Este exemplo demonstra como usar `BiConsumer` para processar pares de valores e realizar operações personalizadas.
+
+## Objetivo
+
+Demonstrar como:
+
+1. Definir consumidores personalizados que operam sobre dois argumentos.
+2. Encadear operações usando o método `andThen`.
+3. Utilizar `BiConsumer` em cenários práticos como manipulação de dados de objetos complexos.
+
+## Conceitos Teóricos
+
+### Interface `BiConsumer`
+A interface funcional `BiConsumer<T, U>` é usada para definir operações que processam dois argumentos sem retornar valores. Assim como `Consumer`, ela é frequentemente utilizada em operações onde múltiplos valores precisam ser processados simultaneamente.
+
+- **Método funcional:** `void accept(T t, U u)`
+  - Recebe dois argumentos do tipo `T` e `U` e executa a ação definida na implementação.
+
+- **Encadeamento:** O método padrão `andThen` permite compor dois `BiConsumers`, executando ambos na sequência sobre os mesmos argumentos.
+  ```java
+  default BiConsumer<T, U> andThen(BiConsumer<? super T, ? super U> after) {
+      Objects.requireNonNull(after);
+      return (t, u) -> {
+          accept(t, u);
+          after.accept(t, u);
+      };
+  }
+  ```
+
+## Estrutura do Código
+
+### Definições Importantes
+
+- **`listStudent`**: Uma lista de objetos do tipo `Student`, representando os dados a serem processados.
+- **Exemplos de `BiConsumer`**:
+  - Operações matemáticas simples como multiplicação e divisão.
+  - Processamento de dados de estudantes (nome e atividades).
+
+### Métodos
+
+#### `printUserNameAndUserActivities`
+Usa um `BiConsumer` para processar e imprimir o nome e as atividades de cada estudante.
+```java
+    public static void printUserNameAndUserActivities() {
+  BiConsumer<String, List<String>> studentNameAndActivities = (studentName, studentActivities) -> {
+    System.out.println("Student name: " + studentName + ", " + "Student Activities: " + studentActivities);
+  };
+
+  /*forEach espera um Consumer
+   *
+   * BiConsumer precisa de dois parâmetros
+   * O lambda '(student) -> studentNameAndActivities.accept(student.getName(), student.getActivities())' funciona como
+   * um adaptador, pegando um Student e extraindo os dois argumentos necessários para o BiConsumer
+   *
+   * */
+  listStudent.forEach((student) -> studentNameAndActivities.accept(student.getName(), student.getActivities()));
+}
+```
+
+### Método Principal
+Demonstra o uso de `BiConsumer` em diferentes contextos:
+
+1. Operações básicas de texto com dois argumentos.
+2. Operações matemáticas como multiplicação e divisão, com tratamento de erro (divisão por zero).
+3. Aplicação de `BiConsumer` para processar dados de estudantes.
+
+```java
+public static void main(String[] args) {
+
+    BiConsumer<String, String> biConsumer = (a, b) -> {
+        System.out.println("a : " + a + ", b: " + b);
+    };
+
+    biConsumer.accept("Java 8", "JAVA!");
+
+    BiConsumer<Double, Double> biconsumerMultiplication = (a, b) -> {
+        System.out.println(a + " x " + b + " = " + a * b);
+    };
+    biconsumerMultiplication.accept(2.0, 3.0);
+
+    BiConsumer<Double, Double> biconsumerDivision = (a, b) -> {
+        if (b == 0) {
+            System.out.println("Division by 0 not allowed");
+        } else {
+            System.out.println(a + " / " + b + " = " + a / b);
+        }
+    };
+
+    biconsumerMultiplication.andThen(biconsumerDivision).accept(3.0, 9.0);
+
+    printUserNameAndUserActivities();
+}
+```
+
+## Bipredicate
+
 Predicate - BiPredicate
 Function - BiFunction, UnaryOperator, BinaryOperator

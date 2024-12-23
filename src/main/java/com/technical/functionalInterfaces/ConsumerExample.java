@@ -13,13 +13,11 @@ public class ConsumerExample {
     public static Consumer<Student> consumerStudentActivities = (student) -> System.out.println(student.getActivities());
 
     public static void printName() {
-        Consumer<Student> consumer2 = (student) -> System.out.println(student);
-        studentList.forEach(consumer2);
+         studentList.forEach(consumerStudentName);
     }
 
     public static void printNameAndActivities() {
         System.out.println("\nprintNameAndActivities");
-
 
         studentList.forEach(consumerStudentName.andThen(consumerStudentActivities));//consumer chaining
     }
@@ -30,19 +28,11 @@ public class ConsumerExample {
         System.out.println("\nprintNameAndActivitiesWithFilter");
 
         studentList.forEach(student -> {
-            if (student.getGradeLevel() >= 3 && student.getGpa() >=4) {
+            if (student.getGradeLevel() >= 3 && student.getGpa() >= 4) {
                 consumerStudentName.andThen(consumerStudentActivities).accept(student);
             }
         });
     }
-
-/*    public static void printNameAndActivitiesWithFilterStream() {
-
-        System.out.println("\nprintNameAndActivitiesWithFilterStream");
-        studentList.stream()
-                .filter(student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4)
-                .forEach(consumerStudentName.andThen(consumerStudentActivities));
-    }*/
 
     public static void main(String[] args) {
         Consumer<String> c1 = (s) -> System.out.println(s.toUpperCase());
@@ -52,5 +42,18 @@ public class ConsumerExample {
         printName();
 
         printNameAndActivities();
+
+        printNameAndActivitiesWithFilter();
     }
 }
+
+
+
+
+/*    public static void printNameAndActivitiesWithFilterStream() {
+
+        System.out.println("\nprintNameAndActivitiesWithFilterStream");
+        studentList.stream()
+                .filter(student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4)
+                .forEach(consumerStudentName.andThen(consumerStudentActivities));
+    }*/
