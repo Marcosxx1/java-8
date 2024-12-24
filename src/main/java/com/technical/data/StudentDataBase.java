@@ -4,9 +4,14 @@ import lombok.Data;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Data
 public class StudentDataBase {
+
+    public static Supplier<Student> studentSupplier = ()->{
+        return new Student("Adam", 2, 3.6, "male", Arrays.asList("swimming", "basketball", "volleyball"));
+    };
 
     public static List<Student> getAllStudents() {
 
@@ -21,4 +26,5 @@ public class StudentDataBase {
 
         return List.of(student1, student2, student3, student4, student5, student6);
     }
+
 }

@@ -1,3 +1,40 @@
+## Temas que estudei neste repositório
+
+- [Programação Imperativa](#programação-imperativa)
+- [Programação Funcional](#programação-funcional)
+- [Expressões Lambda](#expressões-lambda)
+  - [Sintaxe Lambda](#sintaxe-da-lambda)
+  - [Usos das expressões lambda](#usos-das-expressões-lambda)
+- [Interfaces Funcionais](#interfaces-funcionais)
+- [Runnable](#runnable)
+- [Interfaces Funcionais](#interfaces-funcionais)
+- [Consumer](#consumer)
+  - [Conceitos Teóricos](#conceitos-teóricos)
+  - [Usos no método foreach](#usos-no-método-foreach)
+  - [Aplicações Práticas](#aplicações-práticas)
+  - [Estrutura do Código](#estrutura-do-código)
+  - [Métodos](#métodos)
+  - [Método Principal](#método-principal)
+- [BiConsumer](#biconsumer)
+  - [Objetivo](#objetivo)
+  - [Conceitos Teóricos](#conceitos-teóricos-biconsumer)
+  - [Estrutura do Código](#estrutura-do-código-biconsumer)
+  - [Métodos](#métodos-biconsumer)
+  - [Método Principal](#método-principal-biconsumer)
+- [Predicate](#predicate)
+  - [Usos do Predicate](#usos-do-predicate)
+- [A expressão direta é um Predicate](#a-expressão-direta-é-um-predicate)
+- [Quando usar Predicados Definidos versus Expressões Diretas](#quando-usar-predicados-definidos-versus-expressões-diretas)
+- [BiPredicate](#bipredicate)
+- [Function\<T, R>](#functiont-r)
+- [BiFunction em Java](#bifunction-em-java)
+- [BiFunction e Streams](#bifunction-e-streams)
+- [UnaryOperator](#unaryoperator)
+- [BinaryOperator](#binaryoperator)
+- [Method Reference](#method-reference)
+- [Constructor Reference](#constructor-reference)
+- [Lambda Local Variables](#lambda-local-variables)
+
 ### Programação Imperativa
 
 - **Foco no "como"**: Define passo a passo como as operações devem ser realizadas.
@@ -49,7 +86,7 @@ Elas possuem todas as características de um método tradicional, como:
 Diferentemente de métodos normais, lambdas não estão vinculadas a uma classe específica. Elas podem ser atribuídas a
 variáveis e até mesmo passadas como argumentos.
 
-#### **Sintaxe da Lambda**
+### **Sintaxe da Lambda**
 
 A estrutura básica de uma expressão lambda é:
 
@@ -72,7 +109,7 @@ Exemplo vazio:
 O principal objetivo das lambdas é implementar **interfaces funcionais** (também chamadas de **SAM interfaces**), que
 possuem **apenas um método abstrato**. Essas interfaces são marcadas com a anotação `@FunctionalInterface`.
 
-#### Interfaces funcionais
+## Interfaces funcionais
 
 Uma interface funcional é uma ‘interface’ que tem **apenas** um método abstrato. isso significa que lea foi projetada
 para
@@ -169,11 +206,9 @@ Runnable runnable = () -> {
 As lambdas oferecem uma forma mais concisa e legível de implementar essas interfaces, tornando o código mais enxuto e
 fácil de entender.
 
-### Interfaces funcionais no Java8
+### Interfaces funcionais
 
 ## Consumer:
-
-## Objetivo
 
 Demonstrar como:
 
@@ -181,7 +216,7 @@ Demonstrar como:
 2. Encadear consumidores usando o método `andThen` para realizar operações sequenciais.
 3. Filtrar elementos de uma coleção com base em condições específicas antes de aplicar consumidores.
 
-## Conceitos Teóricos
+### Conceitos Teóricos
 
 ### Interface `Consumer`
 
@@ -216,9 +251,8 @@ void forEach(Consumer<? super T> action);
 - **Modificação de elementos.**
 - **Registros de log ou operações auxiliares.**
 
-## Estrutura do Código
+### Estrutura do Código
 
-### Definições Importantes
 
 ```java
 public static List<Student> studentList = StudentDataBase.getAllStudents();
@@ -291,7 +325,7 @@ Este exemplo explora o uso da interface funcional `BiConsumer` do Java 8, que fa
 A interface `BiConsumer` representa uma operação que aceita dois argumentos de entrada e não retorna nenhum resultado.
 Este exemplo demonstra como usar `BiConsumer` para processar pares de valores e realizar operações personalizadas.
 
-## Objetivo
+### Objetivo
 
 Demonstrar como:
 
@@ -299,7 +333,7 @@ Demonstrar como:
 2. Encadear operações usando o método `andThen`.
 3. Utilizar `BiConsumer` em cenários práticos como manipulação de dados de objetos complexos.
 
-## Conceitos Teóricos
+### Conceitos Teóricos Biconsumer
 
 ### Interface `BiConsumer`
 
@@ -322,16 +356,14 @@ processados simultaneamente.
   }
   ```
 
-## Estrutura do Código
-
-### Definições Importantes
+### Estrutura do Código Biconsumer
 
 - **`listStudent`**: Uma lista de objetos do tipo `Student`, representando os dados a serem processados.
 - **Exemplos de `BiConsumer`**:
     - Operações matemáticas simples como multiplicação e divisão.
     - Processamento de dados de estudantes (nome e atividades).
 
-### Métodos
+### Métodos Biconsumer
 
 #### `printUserNameAndUserActivities`
 
@@ -354,7 +386,7 @@ Usa um `BiConsumer` para processar e imprimir o nome e as atividades de cada est
 }
 ```
 
-### Método Principal
+### Método Principal Biconsumer
 
 Demonstra o uso de `BiConsumer` em diferentes contextos:
 
@@ -1278,3 +1310,115 @@ matemáticas, lógicas ou de combinação de elementos. Além disso, seu uso com
 eficientes e concisas em coleções de dados.
 
 
+# Method Reference
+
+Disponível como parte do Java 8, seu propósito é simplificar a implementação de interfaces funcionais.
+Um atalho para escrever expressões Lambda, referindo-se diretamente a um método de uma classe.
+
+### Sintaxe
+
+```java
+ClassName::instance-methodName
+ClassName::static-methodName
+Instance::methodName
+```
+
+### Quando usar Method Reference
+
+Method References são úteis quando uma expressão lambda apenas chama um método existente sem adicionar lógica extra. Aqui está um exemplo:
+
+#### Exemplo com Lambda
+```java
+Function<String, String> toUpperCaseLambda = (string) -> string.toUpperCase();
+```
+
+#### Com Method Reference
+```java
+Function<String, String> toUpperCaseMethodReference = String::toUpperCase;
+```
+
+### Quando Method Reference não é aplicável
+
+Se a expressão lambda envolve lógica adicional, Method Reference não pode ser usada. Por exemplo:
+
+```java
+Predicate<Student> studentPredicate = (student) -> student.getGradeLevel() >= 3;
+```
+Neste caso, precisamos usar a expressão lambda porque a lógica compara a nota com um valor.
+
+---
+
+# Constructor Reference
+
+Constructor References permitem criar objetos usando uma sintaxe simplificada e também fazem parte do Java 8.
+Eles funcionam como um atalho para chamar o construtor de uma classe.
+
+### Sintaxe
+
+```java
+ClassName::new
+```
+
+### Exemplo Básico
+
+#### Com Lambda
+```java
+Supplier<Student> studentSupplier = () -> new Student();
+```
+
+#### Com Constructor Reference
+```java
+Supplier<Student> studentSupplier = Student::new; // Construtor vazio deve existir
+```
+
+### Exemplos Inválidos
+
+- **Erro de compilação**:
+
+```java
+Student student = Student::new; // Inválido, não usamos Supplier
+```
+
+- **Construtor vazio ausente**:
+
+```java
+Supplier<Student> studentSupplier = Student::new; // Necessita de um construtor vazio
+```
+
+### Exemplo Completo
+
+```java
+package com.technical.constructorreference;
+
+import com.technical.data.Student;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+public class ConstructorReferenceExample {
+
+    static Supplier<Student> studentSupplier = Student::new; // Construtor vazio deve existir
+
+    static Function<String, Student> studentFunction = Student::new;
+
+    public static void main(String[] args) {
+
+        System.out.println(studentSupplier.get());
+        System.out.println(studentFunction.apply("ABDEFG"));
+    }
+}
+```
+
+### Quando usar Constructor Reference
+
+- Quando precisamso instanciar objetos repetidamente e um construtor adequado está disponível.
+- Ideal para trabalhar com coleções ou APIs de processamento em lotes.
+
+
+
+# Lambda e Variáveis locais
+O que é uma variável local?
+- Qualquer variável que é declarada dentro de um método é chamada de variável local
+- Lambdas possuem algumas restrições em uso de variáveis locais:
+  - Não é permitido o uso do mesmo nome de variável local de parametros da lambda e denrto do corpo da lambda
+  - Não é permitido re-atribuir um valor à uma variável local
+- Sem restrições em variáveis de instâncias
