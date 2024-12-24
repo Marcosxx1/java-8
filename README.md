@@ -742,5 +742,147 @@ System.out.println(square.apply(5)); // 25
 ```
 
 
+## BiFunction em Java
 
-Function - BiFunction, UnaryOperator, BinaryOperator
+A interface `BiFunction<T, U, R>` em Java faz parte do pacote `java.util.function` e é usada para representar uma função que aceita dois argumentos, do tipo `T` e `U`, e retorna um resultado do tipo `R`. Essa interface é especialmente útil quando se trabalha com operações que exigem dois parâmetros de entrada.
+
+## Definição
+
+```java
+@FunctionalInterface
+public interface BiFunction<T, U, R> {
+    R apply(T t, U u);
+
+    default <V> BiFunction<T, U, V> andThen(Function<? super R, ? extends V> after) {
+        Objects.requireNonNull(after);
+        return (T t, U u) -> after.apply(apply(t, u));
+    }
+
+    static <T, U> BiFunction<T, U, Boolean> andThen(Predicate<? super R> after) {
+        Objects.requireNonNull(after);
+        return (T t, U u) -> after.test(apply(t, u));
+    }
+}
+```
+- **`apply(T t, U u)`**: Método que aplica a função, recebendo dois parâmetros e retornando um resultado.
+- **`andThen(Function<? super R, ? extends V> after)`**: Método que permite compor a função com outra função após a execução.
+
+## Características
+
+- **Dois argumentos e um resultado:** Recebe dois argumentos de tipos `T` e `U`, e retorna um valor de tipo `R`.
+- **Método `andThen`**: Permite encadear uma função após a execução da função original.
+- **Interface funcional**: Pode ser usada com expressões lambda ou referências de método.
+
+## Exemplos de Uso
+
+### Exemplo 1: Somar Dois Números
+
+```java
+import java.util.function.BiFunction;
+
+public class Main {
+    public static void main(String[] args) {
+        BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+
+        System.out.println(add.apply(5, 3)); // 8
+    }
+}
+```
+
+### Exemplo 2: Concatenar Duas Strings
+
+```java
+import java.util.function.BiFunction;
+
+public class Main {
+    public static void main(String[] args) {
+        BiFunction<String, String, String> concatenate = (s1, s2) -> s1 + s2;
+
+        System.out.println(concatenate.apply("Hello, ", "World!")); // Hello, World!
+    }
+}
+```
+
+### Exemplo 3: Compor Funções com `andThen`
+
+```java
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+public class Main {
+    public static void main(String[] args) {
+        BiFunction<Integer, Integer, Integer> multiply = (a, b) -> a * b;
+        Function<Integer, String> toString = (x) -> "Resultado: " + x;
+
+        BiFunction<Integer, Integer, String> multiplyAndConvert = multiply.andThen(toString);
+
+        System.out.println(multiplyAndConvert.apply(3, 5)); // Resultado: 15
+    }
+}
+```
+
+## BiFunction e Streams
+
+A interface `BiFunction` também pode ser usada em conjunto com a API de Streams para realizar operações que envolvem dois argumentos. Ela pode ser útil, por exemplo, ao combinar dois elementos de um stream.
+
+### Exemplo 1: Reduzir Dois Fluxos em Um Valor Comum
+
+Imagine que temos dois fluxos de inteiros e queremos somá-los em um único valor:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Integer> list1 = Arrays.asList(1, 2, 3);
+        List<Integer> list2 = Arrays.asList(4, 5, 6);
+
+        BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+
+        int sum = Stream.iterate(0, i -> i + 1)
+                        .limit(Math.min(list1.size(), list2.size()))
+                        .map(i -> add.apply(list1.get(i), list2.get(i)))
+                        .reduce(0, Integer::sum);
+
+        System.out.println(sum); // 21
+    }
+}
+```
+
+### Exemplo 2: Combinação de Valores em Um `Map`
+
+Se você tiver dois fluxos e quiser combinar os valores de ambos em um mapa, você pode usar `BiFunction` com a operação de redução:
+
+```java
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.stream.Stream;
+
+public class Main {
+    public static void main(String[] args) {
+        Stream<String> keys = Stream.of("A", "B", "C");
+        Stream<Integer> values = Stream.of(1, 2, 3);
+
+        BiFunction<String, Integer, String> combine = (key, value) -> key + value;
+
+        Map<String, String> map = Stream
+            .zip(keys, values, combine)
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        System.out.println(map); // {A=1, B=2, C=3}
+    }
+}
+```
+
+## Comparação com Outras Interfaces
+
+| Interface            | Número de argumentos | Tipo de Retorno |
+|----------------------|----------------------|-----------------|
+| `BiFunction<T, U, R>` | 2                    | R               |
+| `Function<T, R>`      | 1                    | R               |
+| `UnaryOperator<T>`    | 1                    | T               |
+| `Predicate<T>`        | 1                    | boolean         |
+
