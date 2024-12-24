@@ -6,24 +6,27 @@ import java.util.function.UnaryOperator;
 
 public class UnaryOperatorExample {
 
-    static UnaryOperator<String> unaryOperator = ((string) -> string.concat("Default"));
-
-    // Criando um UnaryOperator para modificar o nome do aluno
+    static UnaryOperator<String> toUpperCaseUnary = ((string) -> string.toUpperCase());
+    static UnaryOperator<Integer> numberSquared = (x -> x * x);
+    static UnaryOperator<String> concatUnary = (s -> s.concat("Default!"));
     static UnaryOperator<String> applyProcessedOnStudentName = (string) -> {
-        // Usando StringBuilder para adicionar um prefixo ao nome do aluno
+
         StringBuilder sb = new StringBuilder(string);
         sb.append(" (Processed)");
         return sb.toString();
     };
+
     public static void main(String[] args) {
 
-        System.out.println( unaryOperator.apply("TESTE"));
+        System.out.println(concatUnary.apply("TESTE"));
 
         StudentDataBase.getAllStudents().forEach(student -> {
-           var updatedStudentName =  applyProcessedOnStudentName.apply(student.getName());
+            var updatedStudentName = applyProcessedOnStudentName.apply(student.getName());
             System.out.println(updatedStudentName);
         });
 
+        System.out.println("Number squared (2): " + numberSquared.apply(2));
+        System.out.println("convert this phrase to uppercase | "+ toUpperCaseUnary.apply("convert this phrase to uppercase")) ;
 
     }
 }

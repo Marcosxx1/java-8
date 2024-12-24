@@ -127,19 +127,28 @@ Antes:
 
 ```java
         Runnable runnable = new Runnable() {
-          @Override
-          public void run() {
-              System.out.println("Inside Runnable");
-          }
-      };
+    @Override
+    public void run() {
+        System.out.println("Inside Runnable");
+    }
+};
 
-        new Thread(runnable).start();
+        new
+
+Thread(runnable).
+
+start();
 ```
 
 depois:
+
 ```java
 Runnable runnable = () -> System.out.println("Inside Runnable");
-    new Thread(runnable).start();
+    new
+
+Thread(runnable).
+
+start();
 ```
 
 Lembrando que quando é apenas uma declaração podemos utilizar sem as {}, Ex:
@@ -159,7 +168,6 @@ Runnable runnable = () -> {
 
 As lambdas oferecem uma forma mais concisa e legível de implementar essas interfaces, tornando o código mais enxuto e
 fácil de entender.
-
 
 ### Interfaces funcionais no Java8
 
@@ -396,20 +404,21 @@ exemplo:
 
 ```java
 import com.technical.data.Student;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class Main {
-  static Predicate<Student> studentPredicateGrade = student -> student.getGradeLevel() >= 3;
-  static Predicate<Student> studentPredicateGPA = student -> student.getGpa() >= 4;
-  static List<Student> listOfStudents = new ArrayList<>();
+    static Predicate<Student> studentPredicateGrade = student -> student.getGradeLevel() >= 3;
+    static Predicate<Student> studentPredicateGPA = student -> student.getGpa() >= 4;
+    static List<Student> listOfStudents = new ArrayList<>();
 
-  public static void main(String[] args) {
-    listOfStudents.stream()
-            .filter(studentPredicateGrade.and(studentPredicateGPA)) // utilizando os Predicate definidos anterioremente
-            .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
-  }
+    public static void main(String[] args) {
+        listOfStudents.stream()
+                .filter(studentPredicateGrade.and(studentPredicateGPA)) // utilizando os Predicate definidos anterioremente
+                .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
+    }
 }
 ```
 
@@ -419,30 +428,30 @@ public class Main {
 
 #### 2. **Usado diretamente (expressão inline)**
 
-Você pode usar expressões lambda diretamente no método `filter`:
- 
+Podemos usar expressões lambda diretamente no método `filter`:
+
 ```java
 import com.technical.data.Student;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class Main {
- 
-  static List<Student> listOfStudents = new ArrayList<>();
 
-  public static void main(String[] args) {
-    listOfStudents.stream()
-            .filter(student ->student.getGradeLevel() >=3 && student.getGpa() >=4) // Expressão direta
-            .forEach(student ->System.out.println("Students with grade >= 3 AND GPA >= 4: "+student));
-  }
+    static List<Student> listOfStudents = new ArrayList<>();
+
+    public static void main(String[] args) {
+        listOfStudents.stream()
+                .filter(student -> student.getGradeLevel() >= 3 && student.getGpa() >= 4) // Expressão direta
+                .forEach(student -> System.out.println("Students with grade >= 3 AND GPA >= 4: " + student));
+    }
 }
 ```
 
 - **Vantagens**:
     - Simplicidade: Ideal para condições que serão usadas uma única vez.
     - Legibilidade local: O código fica direto e fácil de entender.
-
 
 ### **A expressão direta é um `Predicate`?**
 
@@ -462,7 +471,7 @@ aceita um `Predicate<T>`.
 
 #### Use **predicados definidos** quando:
 
-1. **Reutilização:** Você usará a mesma lógica em várias partes do código.
+1. **Reutilização:** Usaremos a mesma lógica em várias partes do código.
 2. **Composição:** Combinações complexas de condições são necessárias.
    ```java
    Predicate<Student> complexCondition = studentPredicateGrade.and(studentPredicateGPA).or(studentStartsWithJ);
@@ -475,10 +484,13 @@ aceita um `Predicate<T>`.
 
 ## BiPredicate
 
-A interface `BiPredicate` em Java faz parte do pacote `java.util.function` e é utilizada para representar uma função que avalia dois argumentos e retorna um valor booleano.
+A interface `BiPredicate` em Java faz parte do pacote `java.util.function` e é utilizada para representar uma função que
+avalia dois argumentos e retorna um valor booleano.
 
 ## Assinatura da Interface
+
 ```java
+
 @FunctionalInterface
 public interface BiPredicate<T, U> {
     boolean test(T t, U u);
@@ -500,6 +512,7 @@ public interface BiPredicate<T, U> {
 ```
 
 ## Características Principais
+
 - **Dois argumentos:** Aceita dois argumentos de tipos genéricos `T` e `U`.
 - **Retorno booleano:** Sempre retorna um valor booleano com base na lógica definida.
 - **Métodos padrão:** Fornece métodos para combinar lógicas com `and`, `or` e `negate`.
@@ -508,6 +521,7 @@ public interface BiPredicate<T, U> {
 ## Exemplo de Uso
 
 ### Exemplo 1: Verificar se a soma de dois números é maior que um limite
+
 ```java
 import java.util.function.BiPredicate;
 
@@ -522,6 +536,7 @@ public class Main {
 ```
 
 ### Exemplo 2: Comparar strings ignorando maiúsculas e minúsculas
+
 ```java
 import java.util.function.BiPredicate;
 
@@ -536,6 +551,7 @@ public class Main {
 ```
 
 ### Exemplo 3: Compondo Predicados
+
 ```java
 import java.util.function.BiPredicate;
 
@@ -553,7 +569,9 @@ public class Main {
 ```
 
 ### Exemplo 4: Usando `BiPredicate` em uma Stream
+
 #### Definindo o `BiPredicate` separadamente
+
 ```java
 import java.util.Arrays;
 import java.util.List;
@@ -567,13 +585,14 @@ public class Main {
         BiPredicate<Integer, Integer> isGreaterThanThreshold = (num, th) -> num > th;
 
         numbers.stream()
-               .filter(num -> isGreaterThanThreshold.test(num, threshold))
-               .forEach(num -> System.out.println("Number greater than " + threshold + ": " + num));
+                .filter(num -> isGreaterThanThreshold.test(num, threshold))
+                .forEach(num -> System.out.println("Number greater than " + threshold + ": " + num));
     }
 }
 ```
 
 #### Usando o `BiPredicate` diretamente na Stream
+
 ```java
 import java.util.Arrays;
 import java.util.List;
@@ -584,42 +603,53 @@ public class Main {
         int threshold = 3;
 
         numbers.stream()
-               .filter(num -> (num > threshold)) // BiPredicate em linha
-               .forEach(num -> System.out.println("Number greater than " + threshold + ": " + num));
+                .filter(num -> (num > threshold)) // BiPredicate em linha
+                .forEach(num -> System.out.println("Number greater than " + threshold + ": " + num));
     }
 }
 ```
 
 ## Quando Usar
-- Quando você precisa de uma lógica que envolve **dois argumentos** e retorna um valor booleano.
-- Ao combinar ou reutilizar condições complexas em streams ou outras operações funcionais.
+
+- Quando precisamos de uma lógica que envolve **dois argumentos** e retorna um valor booleano.
+- Ao combinar ou reutilizar condições complexas em streams, ou outras operações funcionais.
 
 ## Diferença entre `Predicate` e `BiPredicate`
-| Característica        | Predicate         | BiPredicate       |
-|-----------------------|-------------------|-------------------|
-| Número de argumentos | 1                 | 2                 |
-| Uso típico            | Filtragem ou teste de um único elemento | Teste que envolve dois elementos |
+
+| Característica       | Predicate                               | BiPredicate                      |
+|----------------------|-----------------------------------------|----------------------------------|
+| Número de argumentos | 1                                       | 2                                |
+| Uso típico           | Filtragem ou teste de um único elemento | Teste que envolve dois elementos |
 
 ### Exemplo Comparativo
+
 **Predicate:**
+
 ```java
 Predicate<Integer> isEven = n -> n % 2 == 0;
-System.out.println(isEven.test(4)); // true
+System.out.
+
+println(isEven.test(4)); // true
 ```
 
 **BiPredicate:**
+
 ```java
 BiPredicate<Integer, Integer> isSumEven = (a, b) -> (a + b) % 2 == 0;
-System.out.println(isSumEven.test(3, 5)); // true
+System.out.
+
+println(isSumEven.test(3, 5)); // true
 ```
 
 ## Function\<T, R>
 
-A interface `Function<T, R>` em Java faz parte do pacote `java.util.function` e é usada para representar uma função que aceita um único argumento do tipo `T` e retorna um resultado do tipo `R`.
+A interface `Function<T, R>` em Java faz parte do pacote `java.util.function` e é usada para representar uma função que
+aceita um único argumento do tipo `T` e retorna um resultado do tipo `R`.
 
 ## Assinatura da Interface
 
 ```java
+
 @FunctionalInterface
 public interface Function<T, R> {
     R apply(T t);
@@ -668,9 +698,11 @@ public class Main {
 ```java
 Fuunnction<String, Integer> stringLength = String::length;
 
-        System.out.println(stringLength.apply("Hello")); // 5
-    }
-}
+        System.out.
+
+println(stringLength.apply("Hello")); // 5
+        }
+        }
 ```
 
 ### Exemplo 3: Compor Funções
@@ -712,7 +744,7 @@ public class Main {
 ## Diferença entre `Function`, `BiFunction` e Outras Interfaces Relacionadas
 
 | Interface             | Número de argumentos | Tipo de Retorno |
-| --------------------- | -------------------- | --------------- |
+|-----------------------|----------------------|-----------------|
 | `Function<T, R>`      | 1                    | R               |
 | `BiFunction<T, U, R>` | 2                    | R               |
 | `UnaryOperator<T>`    | 1                    | T (mesmo tipo)  |
@@ -724,31 +756,39 @@ public class Main {
 
 ```java
 Function<String, Integer> stringToLength = String::length;
-System.out.println(stringToLength.apply("Java")); // 4
+System.out.
+
+println(stringToLength.apply("Java")); // 4
 ```
 
 **BiFunction:**
 
 ```java
 BiFunction<Integer, Integer, Integer> multiply = (a, b) -> a * b;
-System.out.println(multiply.apply(3, 5)); // 15
+System.out.
+
+println(multiply.apply(3, 5)); // 15
 ```
 
 **UnaryOperator:**
 
 ```java
 UnaryOperator<Integer> square = x -> x * x;
-System.out.println(square.apply(5)); // 25
-```
+System.out.
 
+println(square.apply(5)); // 25
+```
 
 ## BiFunction em Java
 
-A interface `BiFunction<T, U, R>` em Java faz parte do pacote `java.util.function` e é usada para representar uma função que aceita dois argumentos, do tipo `T` e `U`, e retorna um resultado do tipo `R`. Essa interface é especialmente útil quando se trabalha com operações que exigem dois parâmetros de entrada.
+A interface `BiFunction<T, U, R>` em Java faz parte do pacote `java.util.function` e é usada para representar uma função
+que aceita dois argumentos, do tipo `T` e `U`, e retorna um resultado do tipo `R`. Essa interface é especialmente útil
+quando se trabalha com operações que exigem dois parâmetros de entrada.
 
 ## Definição
 
 ```java
+
 @FunctionalInterface
 public interface BiFunction<T, U, R> {
     R apply(T t, U u);
@@ -764,8 +804,10 @@ public interface BiFunction<T, U, R> {
     }
 }
 ```
+
 - **`apply(T t, U u)`**: Método que aplica a função, recebendo dois parâmetros e retornando um resultado.
-- **`andThen(Function<? super R, ? extends V> after)`**: Método que permite compor a função com outra função após a execução.
+- **`andThen(Function<? super R, ? extends V> after)`**: Método que permite compor a função com outra função após a
+  execução.
 
 ## Características
 
@@ -823,7 +865,8 @@ public class Main {
 
 ## BiFunction e Streams
 
-A interface `BiFunction` também pode ser usada em conjunto com a API de Streams para realizar operações que envolvem dois argumentos. Ela pode ser útil, por exemplo, ao combinar dois elementos de um stream.
+A interface `BiFunction` também pode ser usada em conjunto com a API de Streams para realizar operações que envolvem
+dois argumentos. Ela pode ser útil, por exemplo, ao combinar dois elementos de um stream.
 
 ### Exemplo 1: Reduzir Dois Fluxos em Um Valor Comum
 
@@ -843,9 +886,9 @@ public class Main {
         BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
 
         int sum = Stream.iterate(0, i -> i + 1)
-                        .limit(Math.min(list1.size(), list2.size()))
-                        .map(i -> add.apply(list1.get(i), list2.get(i)))
-                        .reduce(0, Integer::sum);
+                .limit(Math.min(list1.size(), list2.size()))
+                .map(i -> add.apply(list1.get(i), list2.get(i)))
+                .reduce(0, Integer::sum);
 
         System.out.println(sum); // 21
     }
@@ -854,7 +897,8 @@ public class Main {
 
 ### Exemplo 2: Combinação de Valores em Um `Map`
 
-Se você tiver dois fluxos e quiser combinar os valores de ambos em um mapa, você pode usar `BiFunction` com a operação de redução:
+Se tivermos dois fluxos e quiser combinar os valores de ambos em um mapa, podemos usar `BiFunction` com a operação de
+redução:
 
 ```java
 import java.util.*;
@@ -869,8 +913,8 @@ public class Main {
         BiFunction<String, Integer, String> combine = (key, value) -> key + value;
 
         Map<String, String> map = Stream
-            .zip(keys, values, combine)
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .zip(keys, values, combine)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
         System.out.println(map); // {A=1, B=2, C=3}
     }
@@ -879,10 +923,358 @@ public class Main {
 
 ## Comparação com Outras Interfaces
 
-| Interface            | Número de argumentos | Tipo de Retorno |
-|----------------------|----------------------|-----------------|
+| Interface             | Número de argumentos | Tipo de Retorno |
+|-----------------------|----------------------|-----------------|
 | `BiFunction<T, U, R>` | 2                    | R               |
 | `Function<T, R>`      | 1                    | R               |
 | `UnaryOperator<T>`    | 1                    | T               |
 | `Predicate<T>`        | 1                    | boolean         |
+
+# UnaryOperator
+
+A interface `UnaryOperator<T>` é uma especialização de `Function<T, T>`. Ela é usada quando precisamos aplicar uma
+operação num valor e retornar o mesmo tipo. Em outras palavras, tanto o tipo de entrada quanto o tipo de saída são do
+tipo `T`.
+
+## Definição
+
+```java
+
+@FunctionalInterface
+public interface UnaryOperator<T> extends Function<T, T> {
+    T apply(T t);
+}
+```
+
+- **`apply(T t)`**: Método que aplica a função no parâmetro `t` e retorna um resultado do mesmo tipo `T`.
+
+## Características
+
+- **Mesma entrada e saída:** A principal característica do `UnaryOperator` é que ele recebe um parâmetro do tipo `T` e
+  retorna um resultado do mesmo tipo.
+- **Especialização de `Function`**: `UnaryOperator` é uma subinterface de `Function`, mas com a conveniência de
+  trabalhar com o mesmo tipo para entrada e saída.
+- **Interface funcional**: Pode ser usada com expressões lambda ou referências de método.
+
+## Exemplos de Uso
+
+### Exemplo 1: Elevar um Número ao Quadrado
+
+```java
+import java.util.function.UnaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        UnaryOperator<Integer> square = x -> x * x;
+
+        System.out.println(square.apply(5)); // 25
+    }
+}
+```
+
+### Exemplo 2: Converter uma String para Maiúsculas
+
+```java
+import java.util.function.UnaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        UnaryOperator<String> toUpperCase = str -> str.toUpperCase();
+
+        System.out.println(toUpperCase.apply("hello")); // HELLO
+    }
+}
+```
+
+### Exemplo 3: Aplicar um Operador de Identidade
+
+O método `identity()` retorna uma função que apenas retorna o valor recebido, sem alterações.
+
+```java
+import java.util.function.UnaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        UnaryOperator<String> identity = UnaryOperator.identity();
+
+        System.out.println(identity.apply("Java")); // Java
+    }
+}
+```
+
+### Exemplo 4: Usando `UnaryOperator` com Streams
+
+Se tivermos uma lista de inteiros e quiser aplicar uma transformação (como multiplicar por 2), podemos usar
+`UnaryOperator` em combinação com Streams.
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        UnaryOperator<Integer> doubleValue = x -> x * 2;
+
+        List<Integer> doubledNumbers = numbers.stream()
+                .map(doubleValue)
+                .collect(Collectors.toList());
+
+        System.out.println(doubledNumbers); // [2, 4, 6, 8, 10]
+    }
+}
+```
+
+## Comparação com Outras Interfaces
+
+| Interface             | Número de argumentos | Tipo de Retorno |
+|-----------------------|----------------------|-----------------|
+| `UnaryOperator<T>`    | 1                    | T               |
+| `Function<T, R>`      | 1                    | R               |
+| `BiFunction<T, U, R>` | 2                    | R               |
+| `Predicate<T>`        | 1                    | boolean         |
+
+`UnaryOperator<T>` é útil quando desejamos aplicar uma transformação ou operação sobre um valor de tipo `T` e obter o
+mesmo tipo `T` como resultado. Sua simplicidade e foco em tipos homogêneos (mesmo tipo de entrada e saída) tornam essa
+interface funcional bastante prática para várias operações.
+
+Aqui está o conteúdo em Markdown com uma explicação detalhada sobre `BinaryOperator`, incluindo muitos exemplos simples
+e alguns exemplos com Streams:
+
+## BinaryOperator
+
+A interface `BinaryOperator<T>` é uma especialização de `BiFunction<T, T, T>`. Ela é usada quando você precisa aplicar
+uma operação em **dois valores do mesmo tipo** e retornar um valor também do mesmo tipo. Em outras palavras, tanto os
+parâmetros de entrada quanto o resultado são do tipo `T`.
+
+## Definição
+
+```java
+
+@FunctionalInterface
+public interface BinaryOperator<T> extends BiFunction<T, T, T> {
+    T apply(T t1, T t2);
+}
+```
+
+- **`apply(T t1, T t2)`**: Método que aplica a operação nos dois parâmetros `t1` e `t2`, ambos do tipo `T`, e retorna um
+  resultado do mesmo tipo `T`.
+
+## Características
+
+- **Dois argumentos e um resultado:** Ambos os parâmetros são do tipo `T`, e o resultado também será do tipo `T`.
+- **Especialização de `BiFunction`**: `BinaryOperator` é uma subinterface de `BiFunction`, mas com a conveniência de
+  trabalhar com o mesmo tipo para ambos os parâmetros e o resultado.
+- **Interface funcional**: Pode ser usada com expressões lambda ou referências de método.
+
+## Exemplos de Uso
+
+### Exemplo 1: Somar Dois Números
+
+Aqui, a operação é a soma de dois números inteiros:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> add = (a, b) -> a + b;
+
+        System.out.println(add.apply(5, 3)); // 8
+    }
+}
+```
+
+### Exemplo 2: Subtrair Dois Números
+
+Aqui, a operação é a subtração de dois números inteiros:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> subtract = (a, b) -> a - b;
+
+        System.out.println(subtract.apply(10, 4)); // 6
+    }
+}
+```
+
+### Exemplo 3: Multiplicar Dois Números
+
+Aqui, a operação é a multiplicação de dois números inteiros:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> multiply = (a, b) -> a * b;
+
+        System.out.println(multiply.apply(6, 7)); // 42
+    }
+}
+```
+
+### Exemplo 4: Dividir Dois Números (Evitar Divisão por Zero)
+
+Neste exemplo, realizamos uma divisão e garantimos que não ocorra divisão por zero:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> divide = (a, b) -> b != 0 ? a / b : 0;
+
+        System.out.println(divide.apply(10, 2)); // 5
+        System.out.println(divide.apply(10, 0)); // 0 (divisão por zero)
+    }
+}
+```
+
+### Exemplo 5: Concatenar Duas Strings
+
+Neste exemplo, concatenamos duas strings usando `BinaryOperator`:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<String> concatenate = (s1, s2) -> s1 + s2;
+
+        System.out.println(concatenate.apply("Hello, ", "World!")); // Hello, World!
+    }
+}
+```
+
+### Exemplo 6: Determinar o Máximo de Dois Valores
+
+Aqui, usamos o `BinaryOperator` para encontrar o maior valor entre dois números:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> max = (a, b) -> a > b ? a : b;
+
+        System.out.println(max.apply(10, 20)); // 20
+        System.out.println(max.apply(30, 25)); // 30
+    }
+}
+```
+
+### Exemplo 7: Determinar o Mínimo de Dois Valores
+
+Neste exemplo, usamos `BinaryOperator` para encontrar o menor valor entre dois números:
+
+```java
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        BinaryOperator<Integer> min = (a, b) -> a < b ? a : b;
+
+        System.out.println(min.apply(15, 25)); // 15
+        System.out.println(min.apply(10, 5));  // 5
+    }
+}
+```
+
+## Exemplos com Streams
+
+Agora, vamos ver alguns exemplos de como usar `BinaryOperator` em conjunto com Streams.
+
+### Exemplo 1: Encontrar o Máximo de Uma Lista de Números
+
+Aqui, usamos o `reduce` para aplicar a operação de encontrar o máximo em uma lista de números:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        BinaryOperator<Integer> max = (a, b) -> a > b ? a : b;
+
+        Integer maxNumber = numbers.stream()
+                .reduce(max)
+                .orElseThrow(() -> new RuntimeException("Lista está vazia"));
+
+        System.out.println(maxNumber); // 5
+    }
+}
+```
+
+### Exemplo 2: Soma de Todos os Elementos de Uma Lista
+
+Aqui, usamos o `reduce` para somar todos os números de uma lista:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+
+        BinaryOperator<Integer> sum = (a, b) -> a + b;
+
+        Integer totalSum = numbers.stream()
+                .reduce(sum)
+                .orElse(0);
+
+        System.out.println(totalSum); // 15
+    }
+}
+```
+
+### Exemplo 3: Combinar Elementos em um `Map`
+
+Neste exemplo, usamos `BinaryOperator` para combinar elementos de duas listas em um `Map`:
+
+```java
+import java.util.*;
+import java.util.function.BinaryOperator;
+
+public class Main {
+    public static void main(String[] args) {
+        List<String> keys = Arrays.asList("A", "B", "C");
+        List<Integer> values = Arrays.asList(1, 2, 3);
+
+        BinaryOperator<Integer> sum = (a, b) -> a + b;
+
+        Map<String, Integer> map = new HashMap<>();
+        for (int i = 0; i < keys.size(); i++) {
+            map.merge(keys.get(i), values.get(i), sum);
+        }
+
+        System.out.println(map); // {A=1, B=2, C=3}
+    }
+}
+```
+
+## Comparação com Outras Interfaces
+
+| Interface             | Número de argumentos | Tipo de Retorno |
+|-----------------------|----------------------|-----------------|
+| `BinaryOperator<T>`   | 2                    | T               |
+| `BiFunction<T, U, R>` | 2                    | R               |
+| `UnaryOperator<T>`    | 1                    | T               |
+| `Function<T, R>`      | 1                    | R               |
+
+`BinaryOperator<T>` é útil quando você precisa aplicar uma operação sobre dois valores do mesmo tipo e obter um
+resultado do mesmo tipo. A simplicidade e a especialização dessa interface tornam-na ideal para muitas operações
+matemáticas, lógicas ou de combinação de elementos. Além disso, seu uso com Streams permite realizar operações
+eficientes e concisas em coleções de dados.
+
 
