@@ -3,26 +3,26 @@
 - [Programação Imperativa](#programação-imperativa)
 - [Programação Funcional](#programação-funcional)
 - [Expressões Lambda](#expressões-lambda)
-  - [Sintaxe Lambda](#sintaxe-da-lambda)
-  - [Usos das expressões lambda](#usos-das-expressões-lambda)
+    - [Sintaxe Lambda](#sintaxe-da-lambda)
+    - [Usos das expressões lambda](#usos-das-expressões-lambda)
 - [Interfaces Funcionais](#interfaces-funcionais)
 - [Runnable](#runnable)
 - [Interfaces Funcionais](#interfaces-funcionais)
 - [Consumer](#consumer)
-  - [Conceitos Teóricos](#conceitos-teóricos)
-  - [Usos no método foreach](#usos-no-método-foreach)
-  - [Aplicações Práticas](#aplicações-práticas)
-  - [Estrutura do Código](#estrutura-do-código)
-  - [Métodos](#métodos)
-  - [Método Principal](#método-principal)
+    - [Conceitos Teóricos](#conceitos-teóricos)
+    - [Usos no método foreach](#usos-no-método-foreach)
+    - [Aplicações Práticas](#aplicações-práticas)
+    - [Estrutura do Código](#estrutura-do-código)
+    - [Métodos](#métodos)
+    - [Método Principal](#método-principal)
 - [BiConsumer](#biconsumer)
-  - [Objetivo](#objetivo)
-  - [Conceitos Teóricos](#conceitos-teóricos-biconsumer)
-  - [Estrutura do Código](#estrutura-do-código-biconsumer)
-  - [Métodos](#métodos-biconsumer)
-  - [Método Principal](#método-principal-biconsumer)
+    - [Objetivo](#objetivo)
+    - [Conceitos Teóricos](#conceitos-teóricos-biconsumer)
+    - [Estrutura do Código](#estrutura-do-código-biconsumer)
+    - [Métodos](#métodos-biconsumer)
+    - [Método Principal](#método-principal-biconsumer)
 - [Predicate](#predicate)
-  - [Usos do Predicate](#usos-do-predicate)
+    - [Usos do Predicate](#usos-do-predicate)
 - [A expressão direta é um Predicate](#a-expressão-direta-é-um-predicate)
 - [Quando usar Predicados Definidos versus Expressões Diretas](#quando-usar-predicados-definidos-versus-expressões-diretas)
 - [BiPredicate](#bipredicate)
@@ -252,7 +252,6 @@ void forEach(Consumer<? super T> action);
 - **Registros de log ou operações auxiliares.**
 
 ### Estrutura do Código
-
 
 ```java
 public static List<Student> studentList = StudentDataBase.getAllStudents();
@@ -1309,7 +1308,6 @@ resultado do mesmo tipo. A simplicidade e a especialização dessa interface tor
 matemáticas, lógicas ou de combinação de elementos. Além disso, seu uso com Streams permite realizar operações
 eficientes e concisas em coleções de dados.
 
-
 # Method Reference
 
 Disponível como parte do Java 8, seu propósito é simplificar a implementação de interfaces funcionais.
@@ -1325,14 +1323,17 @@ Instance::methodName
 
 ### Quando usar Method Reference
 
-Method References são úteis quando uma expressão lambda apenas chama um método existente sem adicionar lógica extra. Aqui está um exemplo:
+Method References são úteis quando uma expressão lambda apenas chama um método existente sem adicionar lógica extra.
+Aqui está um exemplo:
 
 #### Exemplo com Lambda
+
 ```java
 Function<String, String> toUpperCaseLambda = (string) -> string.toUpperCase();
 ```
 
 #### Com Method Reference
+
 ```java
 Function<String, String> toUpperCaseMethodReference = String::toUpperCase;
 ```
@@ -1344,6 +1345,7 @@ Se a expressão lambda envolve lógica adicional, Method Reference não pode ser
 ```java
 Predicate<Student> studentPredicate = (student) -> student.getGradeLevel() >= 3;
 ```
+
 Neste caso, precisamos usar a expressão lambda porque a lógica compara a nota com um valor.
 
 ---
@@ -1362,11 +1364,13 @@ ClassName::new
 ### Exemplo Básico
 
 #### Com Lambda
+
 ```java
 Supplier<Student> studentSupplier = () -> new Student();
 ```
 
 #### Com Constructor Reference
+
 ```java
 Supplier<Student> studentSupplier = Student::new; // Construtor vazio deve existir
 ```
@@ -1391,6 +1395,7 @@ Supplier<Student> studentSupplier = Student::new; // Necessita de um construtor 
 package com.technical.constructorreference;
 
 import com.technical.data.Student;
+
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -1413,12 +1418,45 @@ public class ConstructorReferenceExample {
 - Quando precisamso instanciar objetos repetidamente e um construtor adequado está disponível.
 - Ideal para trabalhar com coleções ou APIs de processamento em lotes.
 
-
-
 # Lambda e Variáveis locais
+
 O que é uma variável local?
+
 - Qualquer variável que é declarada dentro de um método é chamada de variável local
 - Lambdas possuem algumas restrições em uso de variáveis locais:
-  - Não é permitido o uso do mesmo nome de variável local de parametros da lambda e denrto do corpo da lambda
-  - Não é permitido re-atribuir um valor à uma variável local
+    - Não é permitido o uso do mesmo nome de variável local de parametros da lambda e denrto do corpo da lambda
+    - Não é permitido re-atribuir um valor à uma variável local
 - Sem restrições em variáveis de instâncias
+
+# Introdução a Streams API
+
+Apresentada como parte do Java8
+
+Seu principal propósito é realizar operações em `Collections`
+**Operações em Paralelo** são mais fáceis de realizar com as APIs de Stream sem que haja necessidade de utilizar várias
+threads e podem ser utilizadas em arrays com qualquer tipo de E/S
+
+## O que é uma Stream?
+
+Stream é uma sequencia de elementos quais podem ser criados de uma coleção como `List` ou `Arrays` ou qualquer tipo de
+recurso de E/S
+Ex:
+
+```java
+import java.util.Arrays;
+
+public class Ex {
+
+  public static void main(String[] args) {
+
+    LisT<String> names = Arrays.asList("marcos", "aline", "olivia");
+    names.stream(); // criamos uma stream de Strings
+    // em paralelo
+    //names.stram().parallelStream();
+  }
+}
+```
+
+Operações com Stream podem ser realizadas tanto **sequencialmente** ou em **paralelo**
+
+
