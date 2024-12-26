@@ -35,9 +35,22 @@
 - [Constructor Reference](#constructor-reference)
 - [Lambda Local Variables](#lambda-e-variáveis-locais)
 - [Introdução à Streams API](#introdução-à-streams-api)
+  - [Stream Operation - map()](#stream-operation---map)
+  - [Stream Operation - flatMap()](#stream-operation---flatmap)
+  - [Stream Operation - distinct(), count(), sorted()](#stream-operation---distinct-count-sorted)
+  - [Stream Operation - Customized sort using comparator](#stream-operation---customized-sort-using-comparator)
+  - [Stream Operation - filter()](#stream-operation---filter)
+  - [Stream Operation - reduce()](#stream-operation---reduce)
+  - [Stream Operation - Map + Filter + Reduce Pattern](#stream-operation---map--filter--reduce-pattern)
+  - [Stream Operation - max() using reduce() function](#stream-operation---max-using-reduce-function)
+  - [Stream Operation - min() using reduce() function](#stream-operation---min-using-reduce-function)
+  - [Stream Operation - limit() and skip()](#stream-operation---limit-and-skip)
+  - [Stream Operation - allMatch(), anyMatch and noneMatch()](#stream-operation---allmatch-anymatch-and-nonematch)
+  - [Stream Operation - findAny() and findFirst()](#stream-operation---findany-and-findfirst)
+
 - [Comparação: Collections vs. Streams](#comparação-collections-vs-streams)
 - [Debugando Streams](#debugando-streams)
-- [ ](#)
+- [](#)
 
 ### Programação Imperativa
 
@@ -1501,6 +1514,131 @@ class ExemploOperacoes {
 3. **Paralelismo Simplificado**: Usando `parallelStream()`, é possível processar os dados em paralelo, aproveitando melhor os recursos da CPU.
 
 Com essa abordagem, podemos realizar transformações complexas de dados de forma clara e eficiente.
+
+
+ ### Stream Operation - map()
+
+O método `.map()` é usado para transformar ou converter elementos de uma Stream de um tipo para outro. Ele aplica uma função (representada por uma `Function<T, R>`) a cada elemento da Stream, retornando uma nova Stream com os elementos transformados.
+
+- **Não confunda o método `.map()` da Stream API com a interface de coleção `Map<K, V>`**, pois eles têm propósitos diferentes.
+
+#### Exemplo Explicado
+No exemplo abaixo, o objetivo é obter uma lista e um conjunto (`Set`) de nomes de estudantes convertidos para letras maiúsculas.
+
+```java
+package com.technical.streams;
+
+import com.technical.data.Student;
+import com.technical.data.StudentDataBase;
+
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+public class StreamsMapExample {
+
+    // Coleção de estudantes
+    public static List<Student> students = StudentDataBase.getAllStudents();
+
+    // Retorna uma lista de nomes de estudantes em letras maiúsculas
+    public static List<String> getStudentNamesList() {
+        return students.stream()
+                .map(Student::getName) // Transforma cada Student em seu nome (String)
+                .map(String::toUpperCase) // Converte o nome para letras maiúsculas
+                .toList(); // Converte a Stream para uma lista
+    }
+
+    // Retorna um conjunto de nomes de estudantes em letras maiúsculas
+    public static Set<String> getStudentNamesSet() {
+        return students.stream()
+                .map(Student::getName) // Transforma cada Student em seu nome
+                .map(String::toUpperCase) // Converte o nome para letras maiúsculas
+                .collect(Collectors.toSet()); // Coleta os elementos em um Set
+    }
+
+    public static void main(String[] args) {
+        // Imprime os nomes em formato de lista
+        System.out.println(getStudentNamesList());
+        System.out.println("\n");
+
+        // Imprime os nomes em formato de conjunto
+        System.out.println(getStudentNamesSet());
+    }
+}
+```
+
+#### Explicação Passo a Passo
+
+1. **Uso do `.map(Student::getName)`**:
+  - Extrai os nomes dos estudantes (`String`) a partir dos objetos `Student`.
+
+2. **Uso do `.map(String::toUpperCase)`**:
+  - Converte os nomes para letras maiúsculas.
+
+3. **Transformação Final**:
+  - `.toList()`: Cria uma lista (`List`) a partir da Stream.
+  - `.collect(Collectors.toSet())`: Cria um conjunto (`Set`) a partir da Stream.
+
+---
+
+### Principais Pontos sobre `.map()`
+
+1. **Transformação dos Dados**:
+  - `.map()` sempre retorna uma nova Stream contendo os elementos transformados.
+
+2. **Função Necessária**:
+  - O método `.map()` recebe uma função (`Function<T, R>`) que define como transformar os elementos.
+
+3. **Encadeamento**:
+  - O `.map()` pode ser usado em sequência para aplicar várias transformações.
+
+4. **Uso Comum**:
+  - Converter tipos de objetos.
+  - Modificar dados (como converter strings para letras maiúsculas, arredondar números, etc.).
+
+### Stream Operation - flatMap()
+
+
+
+### Stream Operation - distinct(), count(), sorted()
+
+
+
+### Stream Operation - Customized sort using comparator
+
+
+
+### Stream Operation - filter()
+
+
+
+### Stream Operation - reduce()
+
+
+
+### Stream Operation - Map + Filter + Reduce Pattern
+
+
+
+### Stream Operation - max() using reduce() function
+
+
+
+### Stream Operation - min() using reduce() function
+
+
+
+### Stream Operation - limit() and skip()
+
+
+
+### Stream Operation - allMatch(), anyMatch and noneMatch()
+
+
+
+### Stream Operation  - findAny() and findFirst()
+
+
 
 
 # Comparação: Collections vs. Streams
