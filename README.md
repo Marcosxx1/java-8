@@ -1581,7 +1581,7 @@ public class StreamsMapExample {
 
 ---
 
-### Principais Pontos sobre `.map()`
+#### Principais Pontos sobre `.map()`
 
 1. **Transformação dos Dados**:
   - `.map()` sempre retorna uma nova Stream contendo os elementos transformados.
@@ -1599,8 +1599,174 @@ public class StreamsMapExample {
 ### Stream Operation - flatMap()
 
 
+#### Principais Pontos sobre `.flatMap()`
+
+O método `.flatMap()` transforma cada elemento de uma Stream em outra Stream, e então "achata" todas essas Streams em uma única Stream contínua de elementos.
+
+#### Diferença entre `.map()` e `.flatMap()`:
+1. **`.map()`**:
+   - Transforma elementos de uma Stream em outro tipo, mas a estrutura original (ex.: `Stream<List<String>>`) permanece inalterada.
+2. **`.flatMap()`**:
+   - "Achata" múltiplos elementos de uma estrutura composta, como `Stream<List<String>>`, em uma única sequência linear (`Stream<String>`).
+
+---
+
+#### Contexto Comum de Uso:
+- Trabalhar com estruturas aninhadas, como listas ou arrays dentro de uma Stream.
+- Exemplo: Transformar uma `Stream<List<String>>` em uma `Stream<String>`.
+
+---
+
+#### Exemplo Explicado: `.flatMap()`
+
+**Objetivo**: Coletar todas as atividades dos estudantes (`List<String>`) em uma lista única, eliminando a estrutura aninhada.
+
+```java
+package com.technical.streams;
+
+import com.technical.data.Student;
+import com.technical.data.StudentDataBase;
+
+import java.util.List;
+
+public class StreamsFlatMapExample {
+
+    public static List<String> studentActivities() {
+
+        return StudentDataBase.getAllStudents().stream() // Stream<Student>
+                .map(Student::getActivities) // Transforma cada Student em sua lista de atividades: Stream<List<String>>
+                .flatMap(List::stream) // "Achata" todas as listas em uma única Stream<String>
+                .toList(); // Coleta os elementos em uma lista
+    }
+
+    public static void main(String[] args) {
+
+        // Exibe todas as atividades em uma lista linear
+        System.out.println(studentActivities());
+    }
+}
+```
+
+---
+
+#### Explicação Passo a Passo:
+
+1. **Uso do `.map(Student::getActivities)`**:
+  - Cada estudante é transformado em sua lista de atividades (`Stream<List<String>>`).
+
+2. **Uso do `.flatMap(List::stream)`**:
+  - Cada lista de atividades é "achatada" para criar uma única `Stream<String>` com todas as atividades individuais.
+
+3. **Uso do `.toList()`**:
+  - Coleta os elementos resultantes em uma `List<String>`.
+
+---
+
+#### Saída do Exemplo:
+Se tivermos estudantes com as seguintes atividades:
+```java
+Estudante 1: ["Futebol", "Leitura"]
+Estudante 2: ["Caminhada", "Xadrez"]
+Estudante 3: ["Corrida", "Música"]
+```
+
+A saída será:
+```plaintext
+[Futebol, Leitura, Caminhada, Xadrez, Corrida, Música]
+```
+
+---
+
+### Benefícios de `.flatMap()`:
+
+1. **Desaninha Estruturas**:
+  - Ideal para trabalhar com Streams que contêm listas, arrays ou coleções.
+
+2. **Flexibilidade**:
+  - Permite processar dados em formato complexo de forma simples e linear.
+
+3. **Compatibilidade**:
+  - Transforma coleções compostas em sequências simples que podem ser processadas com outros métodos da Stream API.
 
 ### Stream Operation - distinct(), count(), sorted()
+
+#### Descrição
+A operação `.distinct()` remove duplicatas de uma `Stream`, resultando em uma sequência de elementos únicos. Quando combinada com `.count()`, podemos determinar a quantidade de elementos distintos. Já a operação `.sorted()` organiza os elementos da `Stream` em ordem natural ou conforme um comparador especificado.
+
+#### Diferença no Uso de `.distinct()` com e sem `.map()` / `.flatMap()`:
+- Sem `.map()` e `.flatMap()`:
+  - A operação `distinct()` é aplicada diretamente na `Stream<Student>`. A contagem é baseada no número de objetos `Student` únicos, dependendo do método `equals()` e `hashCode()` da classe `Student`.
+
+- Com `.map()` e `.flatMap()`:
+  - Primeiro, transformamos a `Stream<Student>` em uma `Stream<String>` contendo as atividades. A operação `distinct()` então remove duplicatas de atividades, resultando em uma contagem baseada nas atividades únicas.
+
+#### Exemplo de Código
+```java
+package com.technical.streams;
+
+import com.technical.data.Student;
+import com.technical.data.StudentDataBase;
+
+import java.util.List;
+
+public class StreamsFlatMapDistinctCountAndSortedExample {
+
+    public static List<String> returnStudentActivities() {
+        return StudentDataBase.getAllStudents().stream()
+                .map(Student::getActivities)
+                .flatMap(List::stream)
+                .distinct()
+                .toList();
+    }
+
+    public static Long returnActivitiesCount() {
+        return StudentDataBase.getAllStudents().stream()
+                .map(Student::getActivities)
+                .flatMap(List::stream)
+                .distinct()
+                .count();
+    }
+
+    public static List<String> returnActivitieSorted() {
+        return StudentDataBase.getAllStudents().stream()
+                .map(Student::getActivities)
+                .flatMap(List::stream)
+                .sorted()
+                .distinct()
+                .toList();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Atividades: " + returnStudentActivities());
+        System.out.println("Contagem de atividades não repetidas: " + returnActivitiesCount());
+        System.out.println("Atividades organizadas (sorted): " + returnActivitieSorted());
+    }
+}
+```
+
+#### Explicação do Código
+1. **`returnStudentActivities`**:
+  - Cria uma lista contendo todas as atividades únicas extraídas dos estudantes.
+
+2. **`returnActivitiesCount`**:
+  - Conta o número de atividades únicas, aplicando `distinct()` após extrair as atividades com `.map()` e `flatMap()`.
+
+3. **`returnActivitieSorted`**:
+  - Retorna uma lista de atividades organizadas em ordem alfabética usando `.sorted()` e remove duplicatas com `.distinct()`.
+
+#### Saída Esperada
+Com base nos dados fictícios:
+```plaintext
+Atividades: [swimming, basketball, volleyball, gymnastics, soccer, aerobics, dancing, football, baseball]
+Contagem de atividades não repetidas: 9
+Atividades organizadas (sorted): [aerobics, basketball, baseball, dancing, football, gymnastics, soccer, swimming, volleyball]
+```
+
+#### Dúvida Resolvida: Por que a contagem muda sem `.map()` e `.flatMap()`?
+- **Sem `.map()` e `.flatMap()`**:
+  - `distinct()` é aplicado diretamente na `Stream<Student>`, considerando estudantes únicos com base em seus atributos.
+- **Com `.map()` e `.flatMap()`**:
+  - A `Stream<Student>` é transformada em uma `Stream<String>` contendo atividades. `distinct()` remove duplicatas com base nas atividades, resultando em uma contagem diferente.
 
 
 
