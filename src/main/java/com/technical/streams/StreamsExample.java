@@ -20,9 +20,13 @@ public class StreamsExample {
 
         Map<String, List<String>> studentMap = students.stream()
                 //.filter((student -> student.getGradeLevel() >= 3 && student.getGradeLevel() >= 3.9))
-                .filter(gradeLevelGreaterThanThree.and(GpaGreaterThanThreeDotNine))
+                .filter(gradeLevelGreaterThanThree)
+                .filter(GpaGreaterThanThreeDotNine)
                 .collect(Collectors.toMap(Student::getName, Student::getActivities));
+
 
         System.out.println(studentMap);
     }
 }
+
+
