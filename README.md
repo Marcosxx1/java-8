@@ -1671,7 +1671,7 @@ Estudante 3: ["Corrida", "Música"]
 ```
 
 A saída será:
-```plaintext
+```java
 [Futebol, Leitura, Caminhada, Xadrez, Corrida, Música]
 ```
 
@@ -1756,7 +1756,7 @@ public class StreamsFlatMapDistinctCountAndSortedExample {
 
 #### Saída Esperada
 Com base nos dados fictícios:
-```plaintext
+```java
 Atividades: [swimming, basketball, volleyball, gymnastics, soccer, aerobics, dancing, football, baseball]
 Contagem de atividades não repetidas: 9
 Atividades organizadas (sorted): [aerobics, basketball, baseball, dancing, football, gymnastics, soccer, swimming, volleyball]
@@ -1770,78 +1770,134 @@ Atividades organizadas (sorted): [aerobics, basketball, baseball, dancing, footb
 
 
 
-### Stream Operation - Customized sort using comparator
-package com.technical.streams;
+### Stream Operation - Customized sort using Comparator
 
-import com.technical.data.Student;
-import com.technical.data.StudentDataBase;
+#### Descrição
+A operação `.sorted()` em Streams permite organizar elementos de acordo com uma ordem definida. Utilizando a classe `Comparator`, podemos personalizar essa ordenação, seja por um único critério ou aplicando ordens reversas.
 
-import java.util.Comparator;
-import java.util.List;
+#### Exemplos de Ordenação Personalizada
 
-public class StreamsComparatorExample {
+1. **Ordenação por Nome**:
+  - Utilizamos `Comparator.comparing` para ordenar os estudantes alfabeticamente com base no nome.
+   ```java
+   public static List<Student> sortedStudentsByName() {
+       return StudentDataBase.getAllStudents().stream()
+               .sorted(Comparator.comparing(Student::getName))
+               .toList();
+   }
+   ```
 
-    public static List<Student> sortedStudentsByName(){
+2. **Ordenação por GPA**:
+  - Ordena os estudantes pelo GPA (Grade Point Average) em ordem crescente.
+   ```java
+   public static List<Student> studentsSortedByGpa() {
+       return StudentDataBase.getAllStudents().stream()
+               .sorted(Comparator.comparing(Student::getGpa))
+               .toList();
+   }
+   ```
 
-        return StudentDataBase.getAllStudents().stream()
-                .sorted(Comparator.comparing(Student::getName))
-                .toList();
-    }
+3. **Ordenação Reversa por Nome**:
+  - Combina `Comparator.comparing` com `.reversed()` para inverter a ordem de classificação por nome.
+   ```java
+   public static List<Student> studentListSortedReversedByGpa() {
+       return StudentDataBase.getAllStudents().stream()
+               .sorted(Comparator.comparing(Student::getName).reversed())
+               .toList();
+   }
+   ```
 
-    public static List<Student> studentsSortedByGpa(){
-        return StudentDataBase.getAllStudents().stream()
-                .sorted(Comparator.comparing(Student::getGpa))
-                .toList();
-    }
+#### Explicação do Código
+1. **`Comparator.comparing`**:
+   - Utiliza um método de referência para comparar um atributo específico dos objetos na Stream.
 
-    public static List<Student> studentListSortedReversedByGpa(){
-        return StudentDataBase.getAllStudents().stream()
-                .sorted(Comparator.comparing(Student::getName).reversed())
-                .toList();
-    }
+2. **`Comparator.reversed()`**:
+   - Inverte a ordem natural definida pelo `Comparator` original.
 
-    public static void main(String[] args) {
+#### Saída Esperada
+Com base em dados fictícios, a saída pode ser:
+```java
+Students sorted by name: 
+[Student{name='Aline'}, Student{name='Marcos'}, Student{name='Olivia'}, ...]
 
-        System.out.println("Students sorted by name: ");
-        sortedStudentsByName().forEach(System.out::println);
+Students sorted by GPA: 
+[Student{name='Marcos', gpa=3.2}, Student{name='Aline', gpa=3.5}, ...]
 
-        System.out.println("Students sorted by GPA: ");
-        studentsSortedByGpa().forEach(System.out::println);
+Students sorted by GPA Reversed: 
+[Student{name='Olivia', gpa=4.0}, Student{name='Aline', gpa=3.5}, ...]
+```
 
-        System.out.println("Students sorted by GPA Reversed: ");
-        studentListSortedReversedByGpa().forEach(System.out::println);
-    }
-}
+#### Pontos-Chave:
+- Ordenações personalizadas ajudam a organizar os dados conforme critérios de negócio.
+- `Comparator` é flexível e permite composição com métodos como `.reversed()` e `.thenComparing()` para critérios adicionais.
+- O uso de Streams evita a necessidade de manipulação manual de listas para ordenação, tornando o código mais conciso e legível.
+
 
 
 
 ### Stream Operation - filter()
 
-O input do .filter() é uma Interface Funcional: Predicate<>
-package com.technical.streams;
+#### Descrição
+O método `.filter()` é utilizado para processar elementos de uma Stream que atendam a um critério específico, definido através de um `Predicate`. Ele realiza uma operação de filtragem que retorna uma Stream contendo apenas os elementos que satisfazem o predicado fornecido.
 
-import com.technical.data.Student;
-import com.technical.data.StudentDataBase;
+#### Características
+1. **Input**:
+  - O `.filter()` aceita como argumento um `Predicate<T>`, uma interface funcional que avalia cada elemento e retorna um valor booleano.
 
-import java.util.List;
-import java.util.function.Predicate;
+2. **Comportamento**:
+  - A operação é intermediária, ou seja, pode ser encadeada com outras operações.
+  - A filtragem não modifica os elementos da Stream original, apenas determina quais serão incluídos na nova Stream.
 
-public class StreamsFilterExample {
+3. **Exemplo**:
+   Filtrando estudantes do gênero feminino e com GPA maior ou igual a 4.
+   ```java
+   public static Predicate<Student> femaleStudents = (student -> student.getGender().equalsIgnoreCase("female"));
+   public static Predicate<Student> gpaGreaterThanFour = (student -> student.getGpa() >= 4);
 
-    public static Predicate<Student> femaleStudents = ( (student -> student.getGender().equalsIgnoreCase("female")));
-    public static Predicate<Student> gpaGreaterThanFour =((student -> student.getGpa() >= 4));
+   public static List<Student> getAllFemaleStudents() {
+       return StudentDataBase.getAllStudents().stream() // Stream<Student>
+               .filter(femaleStudents.and(gpaGreaterThanFour)) // Filtra apenas estudantes que são mulheres e com GPA >= 4
+               .toList(); // Converte para uma lista
+   }
+   ```
 
-    public static List<Student> getAllFemaleStudents(){
-        return StudentDataBase.getAllStudents().stream() // Stream<Student>
-                .filter(femaleStudents.and(gpaGreaterThanFour)) // Stream<Student>
-                //filters and sends only the students whose gender is female
-                .toList();
-    }
+4. **Chaining**:
+   -  O `.filter()` pode ser encadeado com outros filtros para aplicar vários critérios ao mesmo tempo.
+   ```java
+   .filter(femaleStudents)
+   .filter(gpaGreaterThanFour)
+   ```
 
-    public static void main(String[] args) {
-        getAllFemaleStudents().forEach(System.out::println);
-    }
-}
+#### Saída Esperada
+Com base em uma base de dados fictícia de estudantes:
+```plaintext
+Student{name='Aline', gender='female', gpa=4.2}
+Student{name='Olivia', gender='female', gpa=4.5}
+```
+
+#### Pontos-Técnicos Importantes
+1. **Avaliação Lazy**:
+  - O `.filter()` é avaliado de forma lazy, ou seja, os elementos são processados apenas quando uma operação terminal é invocada.
+
+2. **Eficiência**:
+  - Como as Streams utilizam pipelines, o `.filter()` processa um elemento por vez, o que pode melhorar a eficiência em grandes coleções.
+
+3. **Predicados Combinados**:
+  - O `.filter()` pode utilizar múltiplos predicados combinados com os métodos `.and()`, `.or()` e `.negate()` para criar critérios complexos de filtragem.
+
+   ```java
+   femaleStudents.and(gpaGreaterThanFour);
+   femaleStudents.or(gpaGreaterThanFour);
+   femaleStudents.negate();
+   ```
+
+#### Quando Utilizar?
+- Ao trabalhar com coleções ou dados em que é necessário extrair apenas um subconjunto baseado em regras lógicas claras.
+
+#### Benefícios
+- Simplifica a lógica de filtragem.
+- Reduz o uso de loops explicitamente definidos.
+- Melhora a legibilidade e manutenção do código.
 
 
 ### Stream Operation - reduce()
