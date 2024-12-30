@@ -2589,6 +2589,15 @@ A função `average` calcula a média aritmética dos valores presentes em uma `
    5. Ex:
       6. Converter um `Integer`(wrapper) para `int`(primitivo)
 
+## .mapToObj(), .mapToDouble(), .mapToLong()
+* .mapToObj()
+  * Converte cada elemento de uma stream numérica para algum objeto
+* .mapToDouble()
+  * Converte uma stream numérica para uma stream de `Double`
+* .mapToLong()
+  * Converte uma stream numérica para uma stream de `Long`
+
+
 # Comparação: Collections vs. Streams
 
 ## Collections
