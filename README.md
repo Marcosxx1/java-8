@@ -2626,7 +2626,7 @@ A função `average` calcula a média aritmética dos valores presentes em uma `
 4. **Iteração única**: As Streams só podem ser consumidas uma vez. Tentativas subsequentes resultam em erro.
 5. **Iteração interna**: A Stream gerencia automaticamente a iteração sobre os elementos.
 
----
+--- 
 
 ## Exemplo: Diferenças entre Collections e Streams
 
