@@ -35,18 +35,18 @@
 - [Constructor Reference](#constructor-reference)
 - [Lambda Local Variables](#lambda-e-variáveis-locais)
 - [Introdução à Streams API](#introdução-à-streams-api)
-  - [Stream Operation - map()](#stream-operation---map)
-  - [Stream Operation - flatMap()](#stream-operation---flatmap)
-  - [Stream Operation - distinct(), count(), sorted()](#stream-operation---distinct-count-sorted)
-  - [Stream Operation - Customized sort using comparator](#stream-operation---customized-sort-using-comparator)
-  - [Stream Operation - filter()](#stream-operation---filter)
-  - [Stream Operation - reduce()](#stream-operation---reduce)
-  - [Stream Operation - Map + Filter + Reduce Pattern](#stream-operation---map--filter--reduce-pattern)
-  - [Stream Operation - max() using reduce() function](#stream-operation---max-using-reduce-function)
-  - [Stream Operation - min() using reduce() function](#stream-operation---min-using-reduce-function)
-  - [Stream Operation - limit() and skip()](#stream-operation---limit-and-skip)
-  - [Stream Operation - allMatch(), anyMatch and noneMatch()](#stream-operation---allmatch-anymatch-and-nonematch)
-  - [Stream Operation - findAny() and findFirst()](#stream-operation---findany-and-findfirst)
+    - [Stream Operation - map()](#stream-operation---map)
+    - [Stream Operation - flatMap()](#stream-operation---flatmap)
+    - [Stream Operation - distinct(), count(), sorted()](#stream-operation---distinct-count-sorted)
+    - [Stream Operation - Customized sort using comparator](#stream-operation---customized-sort-using-comparator)
+    - [Stream Operation - filter()](#stream-operation---filter)
+    - [Stream Operation - reduce()](#stream-operation---reduce)
+    - [Stream Operation - Map + Filter + Reduce Pattern](#stream-operation---map--filter--reduce-pattern)
+    - [Stream Operation - max() using reduce() function](#stream-operation---max-using-reduce-function)
+    - [Stream Operation - min() using reduce() function](#stream-operation---min-using-reduce-function)
+    - [Stream Operation - limit() and skip()](#stream-operation---limit-and-skip)
+    - [Stream Operation - allMatch(), anyMatch and noneMatch()](#stream-operation---allmatch-anymatch-and-nonematch)
+    - [Stream Operation - findAny() and findFirst()](#stream-operation---findany-and-findfirst)
 
 - [Comparação: Collections vs. Streams](#comparação-collections-vs-streams)
 - [Debugando Streams](#debugando-streams)
@@ -1088,7 +1088,6 @@ public class Main {
 mesmo tipo `T` como resultado. Sua simplicidade e foco em tipos homogêneos (mesmo tipo de entrada e saída) tornam essa
 interface funcional bastante prática para várias operações.
 
-
 ## BinaryOperator
 
 A interface `BinaryOperator<T>` é uma especialização de `BiFunction<T, T, T>`. Ela é usada quando precisamos aplicar
@@ -1444,11 +1443,14 @@ O que é uma variável local?
 
 # Introdução à Streams API
 
-A **Streams API** foi introduzida no **Java 8** com o objetivo de facilitar o processamento de dados em coleções e outros tipos de fontes, como arrays e entradas/saídas (E/S). Ela permite realizar operações de forma declarativa, com suporte para processamento paralelo, sem a complexidade de gerenciar threads manualmente.
+A **Streams API** foi introduzida no **Java 8** com o objetivo de facilitar o processamento de dados em coleções e
+outros tipos de fontes, como arrays e entradas/saídas (E/S). Ela permite realizar operações de forma declarativa, com
+suporte para processamento paralelo, sem a complexidade de gerenciar threads manualmente.
 
 ## O que é uma Stream?
 
-Uma **Stream** é uma sequência de elementos que pode ser criada a partir de coleções, arrays ou outros recursos de E/S. Com Streams, podemos realizar operações de transformação e filtragem de dados de maneira eficiente e concisa.
+Uma **Stream** é uma sequência de elementos que pode ser criada a partir de coleções, arrays ou outros recursos de E/S.
+Com Streams, podemos realizar operações de transformação e filtragem de dados de maneira eficiente e concisa.
 
 Por exemplo, considere o seguinte código:
 
@@ -1460,10 +1462,10 @@ public class ExemploStream {
 
     public static void main(String[] args) {
         List<String> nomes = Arrays.asList("Marcos", "Aline", "Olívia");
-        
+
         // Criando uma Stream de Strings
         nomes.stream();
-        
+
         // Criando uma Stream paralela
         nomes.stream().parallel();
     }
@@ -1472,9 +1474,11 @@ public class ExemploStream {
 
 ## Operações em Streams
 
-As Streams permitem realizar operações de forma **sequencial** ou **paralela**. Elas suportam dois tipos principais de operações:
+As Streams permitem realizar operações de forma **sequencial** ou **paralela**. Elas suportam dois tipos principais de
+operações:
 
-- **Operações intermediárias**: Transformam ou filtram os dados da Stream e retornam outra Stream. Exemplos: `filter`, `map`, `sorted`.
+- **Operações intermediárias**: Transformam ou filtram os dados da Stream e retornam outra Stream. Exemplos: `filter`,
+  `map`, `sorted`.
 - **Operações terminais**: Finalizam a Stream e produzem um resultado. Exemplos: `collect`, `forEach`, `reduce`.
 
 ### Exemplo de uso com operações intermediárias e terminais:
@@ -1496,11 +1500,11 @@ class ExemploOperacoes {
 
         // Processando a lista de estudantes com Streams
         Map<String, List<String>> mapaEstudantes = listaEstudantes.stream()
-            .filter(filtroGpa) // Operação intermediária
-            .filter(filtroNota) // Operação intermediária
-            .collect(Collectors.toMap(
-                Student::getName, 
-                Student::getActivities)); // Operação terminal
+                .filter(filtroGpa) // Operação intermediária
+                .filter(filtroNota) // Operação intermediária
+                .collect(Collectors.toMap(
+                        Student::getName,
+                        Student::getActivities)); // Operação terminal
 
         System.out.println(mapaEstudantes);
     }
@@ -1511,19 +1515,24 @@ class ExemploOperacoes {
 
 1. **Imutabilidade**: As Streams não alteram as fontes de dados originais; elas produzem novos resultados.
 2. **Lazy Evaluation**: As operações intermediárias são avaliadas apenas quando uma operação terminal é chamada.
-3. **Paralelismo Simplificado**: Usando `parallelStream()`, é possível processar os dados em paralelo, aproveitando melhor os recursos da CPU.
+3. **Paralelismo Simplificado**: Usando `parallelStream()`, é possível processar os dados em paralelo, aproveitando
+   melhor os recursos da CPU.
 
 Com essa abordagem, podemos realizar transformações complexas de dados de forma clara e eficiente.
 
+### Stream Operation - map()
 
- ### Stream Operation - map()
+O método `.map()` é usado para transformar ou converter elementos de uma Stream de um tipo para outro. Ele aplica uma
+função (representada por uma `Function<T, R>`) a cada elemento da Stream, retornando uma nova Stream com os elementos
+transformados.
 
-O método `.map()` é usado para transformar ou converter elementos de uma Stream de um tipo para outro. Ele aplica uma função (representada por uma `Function<T, R>`) a cada elemento da Stream, retornando uma nova Stream com os elementos transformados.
-
-- **Não confunda o método `.map()` da Stream API com a interface de coleção `Map<K, V>`**, pois eles têm propósitos diferentes.
+- **Não confunda o método `.map()` da Stream API com a interface de coleção `Map<K, V>`**, pois eles têm propósitos
+  diferentes.
 
 #### Exemplo Explicado
-No exemplo abaixo, o objetivo é obter uma lista e um conjunto (`Set`) de nomes de estudantes convertidos para letras maiúsculas.
+
+No exemplo abaixo, o objetivo é obter uma lista e um conjunto (`Set`) de nomes de estudantes convertidos para letras
+maiúsculas.
 
 ```java
 package com.technical.streams;
@@ -1570,48 +1579,59 @@ public class StreamsMapExample {
 #### Explicação Passo a Passo
 
 1. **Uso do `.map(Student::getName)`**:
-  - Extrai os nomes dos estudantes (`String`) a partir dos objetos `Student`.
+
+- Extrai os nomes dos estudantes (`String`) a partir dos objetos `Student`.
 
 2. **Uso do `.map(String::toUpperCase)`**:
-  - Converte os nomes para letras maiúsculas.
+
+- Converte os nomes para letras maiúsculas.
 
 3. **Transformação Final**:
-  - `.toList()`: Cria uma lista (`List`) a partir da Stream.
-  - `.collect(Collectors.toSet())`: Cria um conjunto (`Set`) a partir da Stream.
+
+- `.toList()`: Cria uma lista (`List`) a partir da Stream.
+- `.collect(Collectors.toSet())`: Cria um conjunto (`Set`) a partir da Stream.
 
 ---
 
 #### Principais Pontos sobre `.map()`
 
 1. **Transformação dos Dados**:
-  - `.map()` sempre retorna uma nova Stream contendo os elementos transformados.
+
+- `.map()` sempre retorna uma nova Stream contendo os elementos transformados.
 
 2. **Função Necessária**:
-  - O método `.map()` recebe uma função (`Function<T, R>`) que define como transformar os elementos.
+
+- O método `.map()` recebe uma função (`Function<T, R>`) que define como transformar os elementos.
 
 3. **Encadeamento**:
-  - O `.map()` pode ser usado em sequência para aplicar várias transformações.
+
+- O `.map()` pode ser usado em sequência para aplicar várias transformações.
 
 4. **Uso Comum**:
-  - Converter tipos de objetos.
-  - Modificar dados (como converter strings para letras maiúsculas, arredondar números, etc.).
+
+- Converter tipos de objetos.
+- Modificar dados (como converter strings para letras maiúsculas, arredondar números, etc.).
 
 ### Stream Operation - flatMap()
 
-
 #### Principais Pontos sobre `.flatMap()`
 
-O método `.flatMap()` transforma cada elemento de uma Stream em outra Stream, e então "achata" todas essas Streams em uma única Stream contínua de elementos.
+O método `.flatMap()` transforma cada elemento de uma Stream em outra Stream, e então "achata" todas essas Streams em
+uma única Stream contínua de elementos.
 
 #### Diferença entre `.map()` e `.flatMap()`:
+
 1. **`.map()`**:
-   - Transforma elementos de uma Stream em outro tipo, mas a estrutura original (ex.: `Stream<List<String>>`) permanece inalterada.
+    - Transforma elementos de uma Stream em outro tipo, mas a estrutura original (ex.: `Stream<List<String>>`) permanece
+      inalterada.
 2. **`.flatMap()`**:
-   - "Achata" múltiplos elementos de uma estrutura composta, como `Stream<List<String>>`, em uma única sequência linear (`Stream<String>`).
+    - "Achata" múltiplos elementos de uma estrutura composta, como `Stream<List<String>>`, em uma única sequência
+      linear (`Stream<String>`).
 
 ---
 
 #### Contexto Comum de Uso:
+
 - Trabalhar com estruturas aninhadas, como listas ou arrays dentro de uma Stream.
 - Exemplo: Transformar uma `Stream<List<String>>` em uma `Stream<String>`.
 
@@ -1619,7 +1639,8 @@ O método `.flatMap()` transforma cada elemento de uma Stream em outra Stream, e
 
 #### Exemplo Explicado: `.flatMap()`
 
-**Objetivo**: Coletar todas as atividades dos estudantes (`List<String>`) em uma lista única, eliminando a estrutura aninhada.
+**Objetivo**: Coletar todas as atividades dos estudantes (`List<String>`) em uma lista única, eliminando a estrutura
+aninhada.
 
 ```java
 package com.technical.streams;
@@ -1652,27 +1673,33 @@ public class StreamsFlatMapExample {
 #### Explicação Passo a Passo:
 
 1. **Uso do `.map(Student::getActivities)`**:
-  - Cada estudante é transformado em sua lista de atividades (`Stream<List<String>>`).
+
+- Cada estudante é transformado em sua lista de atividades (`Stream<List<String>>`).
 
 2. **Uso do `.flatMap(List::stream)`**:
-  - Cada lista de atividades é "achatada" para criar uma única `Stream<String>` com todas as atividades individuais.
+
+- Cada lista de atividades é "achatada" para criar uma única `Stream<String>` com todas as atividades individuais.
 
 3. **Uso do `.toList()`**:
-  - Coleta os elementos resultantes em uma `List<String>`.
+
+- Coleta os elementos resultantes em uma `List<String>`.
 
 ---
 
 #### Saída do Exemplo:
+
 Se tivermos estudantes com as seguintes atividades:
+
 ```java
-Estudante 1: ["Futebol", "Leitura"]
-Estudante 2: ["Caminhada", "Xadrez"]
-Estudante 3: ["Corrida", "Música"]
+Estudante 1:["Futebol","Leitura"]
+Estudante 2:["Caminhada","Xadrez"]
+Estudante 3:["Corrida","Música"]
 ```
 
 A saída será:
+
 ```java
-[Futebol, Leitura, Caminhada, Xadrez, Corrida, Música]
+[Futebol,Leitura,Caminhada,Xadrez,Corrida,Música]
 ```
 
 ---
@@ -1680,27 +1707,37 @@ A saída será:
 ### Benefícios de `.flatMap()`:
 
 1. **Desaninha Estruturas**:
-  - Ideal para trabalhar com Streams que contêm listas, arrays ou coleções.
+
+- Ideal para trabalhar com Streams que contêm listas, arrays ou coleções.
 
 2. **Flexibilidade**:
-  - Permite processar dados em formato complexo de forma simples e linear.
+
+- Permite processar dados em formato complexo de forma simples e linear.
 
 3. **Compatibilidade**:
-  - Transforma coleções compostas em sequências simples que podem ser processadas com outros métodos da Stream API.
+
+- Transforma coleções compostas em sequências simples que podem ser processadas com outros métodos da Stream API.
 
 ### Stream Operation - distinct(), count(), sorted()
 
 #### Descrição
-A operação `.distinct()` remove duplicatas de uma `Stream`, resultando em uma sequência de elementos únicos. Quando combinada com `.count()`, podemos determinar a quantidade de elementos distintos. Já a operação `.sorted()` organiza os elementos da `Stream` em ordem natural ou conforme um comparador especificado.
+
+A operação `.distinct()` remove duplicatas de uma `Stream`, resultando em uma sequência de elementos únicos. Quando
+combinada com `.count()`, podemos determinar a quantidade de elementos distintos. Já a operação `.sorted()` organiza os
+elementos da `Stream` em ordem natural ou conforme um comparador especificado.
 
 #### Diferença no Uso de `.distinct()` com e sem `.map()` / `.flatMap()`:
+
 - Sem `.map()` e `.flatMap()`:
-  - A operação `distinct()` é aplicada diretamente na `Stream<Student>`. A contagem é baseada no número de objetos `Student` únicos, dependendo do método `equals()` e `hashCode()` da classe `Student`.
+    - A operação `distinct()` é aplicada diretamente na `Stream<Student>`. A contagem é baseada no número de objetos
+      `Student` únicos, dependendo do método `equals()` e `hashCode()` da classe `Student`.
 
 - Com `.map()` e `.flatMap()`:
-  - Primeiro, transformamos a `Stream<Student>` em uma `Stream<String>` contendo as atividades. A operação `distinct()` então remove duplicatas de atividades, resultando em uma contagem baseada nas atividades únicas.
+    - Primeiro, transformamos a `Stream<Student>` em uma `Stream<String>` contendo as atividades. A operação
+      `distinct()` então remove duplicatas de atividades, resultando em uma contagem baseada nas atividades únicas.
 
 #### Exemplo de Código
+
 ```java
 package com.technical.streams;
 
@@ -1745,108 +1782,169 @@ public class StreamsFlatMapDistinctCountAndSortedExample {
 ```
 
 #### Explicação do Código
+
 1. **`returnStudentActivities`**:
-  - Cria uma lista contendo todas as atividades únicas extraídas dos estudantes.
+
+- Cria uma lista contendo todas as atividades únicas extraídas dos estudantes.
 
 2. **`returnActivitiesCount`**:
-  - Conta o número de atividades únicas, aplicando `distinct()` após extrair as atividades com `.map()` e `flatMap()`.
+
+- Conta o número de atividades únicas, aplicando `distinct()` após extrair as atividades com `.map()` e `flatMap()`.
 
 3. **`returnActivitieSorted`**:
-  - Retorna uma lista de atividades organizadas em ordem alfabética usando `.sorted()` e remove duplicatas com `.distinct()`.
+
+- Retorna uma lista de atividades organizadas em ordem alfabética usando `.sorted()` e remove duplicatas com
+  `.distinct()`.
 
 #### Saída Esperada
+
 Com base nos dados fictícios:
+
 ```java
-Atividades: [swimming, basketball, volleyball, gymnastics, soccer, aerobics, dancing, football, baseball]
-Contagem de atividades não repetidas: 9
-Atividades organizadas (sorted): [aerobics, basketball, baseball, dancing, football, gymnastics, soccer, swimming, volleyball]
+Atividades:[swimming,basketball,volleyball,gymnastics,soccer,aerobics,dancing,football,baseball]
+Contagem de
+atividades não
+repetidas:9
+
+Atividades organizadas(sorted):[aerobics,basketball,baseball,dancing,football,gymnastics,soccer,swimming,volleyball]
 ```
 
 #### Dúvida Resolvida: Por que a contagem muda sem `.map()` e `.flatMap()`?
+
 - **Sem `.map()` e `.flatMap()`**:
-  - `distinct()` é aplicado diretamente na `Stream<Student>`, considerando estudantes únicos com base em seus atributos.
+    - `distinct()` é aplicado diretamente na `Stream<Student>`, considerando estudantes únicos com base em seus
+      atributos.
 - **Com `.map()` e `.flatMap()`**:
-  - A `Stream<Student>` é transformada em uma `Stream<String>` contendo atividades. `distinct()` remove duplicatas com base nas atividades, resultando em uma contagem diferente.
-
-
+    - A `Stream<Student>` é transformada em uma `Stream<String>` contendo atividades. `distinct()` remove duplicatas com
+      base nas atividades, resultando em uma contagem diferente.
 
 ### Stream Operation - Customized sort using Comparator
 
 #### Descrição
-A operação `.sorted()` em Streams permite organizar elementos de acordo com uma ordem definida. Utilizando a classe `Comparator`, podemos personalizar essa ordenação, seja por um único critério ou aplicando ordens reversas.
+
+A operação `.sorted()` em Streams permite organizar elementos de acordo com uma ordem definida. Utilizando a classe
+`Comparator`, podemos personalizar essa ordenação, seja por um único critério ou aplicando ordens reversas.
 
 #### Exemplos de Ordenação Personalizada
 
 1. **Ordenação por Nome**:
-  - Utilizamos `Comparator.comparing` para ordenar os estudantes alfabeticamente com base no nome.
+
+- Utilizamos `Comparator.comparing` para ordenar os estudantes alfabeticamente com base no nome.
+
    ```java
    public static List<Student> sortedStudentsByName() {
-       return StudentDataBase.getAllStudents().stream()
-               .sorted(Comparator.comparing(Student::getName))
-               .toList();
-   }
+    return StudentDataBase.getAllStudents().stream()
+            .sorted(Comparator.comparing(Student::getName))
+            .toList();
+}
    ```
 
 2. **Ordenação por GPA**:
-  - Ordena os estudantes pelo GPA (Grade Point Average) em ordem crescente.
+
+- Ordena os estudantes pelo GPA (Grade Point Average) em ordem crescente.
+
    ```java
    public static List<Student> studentsSortedByGpa() {
-       return StudentDataBase.getAllStudents().stream()
-               .sorted(Comparator.comparing(Student::getGpa))
-               .toList();
-   }
+    return StudentDataBase.getAllStudents().stream()
+            .sorted(Comparator.comparing(Student::getGpa))
+            .toList();
+}
    ```
 
 3. **Ordenação Reversa por Nome**:
-  - Combina `Comparator.comparing` com `.reversed()` para inverter a ordem de classificação por nome.
+
+- Combina `Comparator.comparing` com `.reversed()` para inverter a ordem de classificação por nome.
+
    ```java
    public static List<Student> studentListSortedReversedByGpa() {
-       return StudentDataBase.getAllStudents().stream()
-               .sorted(Comparator.comparing(Student::getName).reversed())
-               .toList();
-   }
+    return StudentDataBase.getAllStudents().stream()
+            .sorted(Comparator.comparing(Student::getName).reversed())
+            .toList();
+}
    ```
 
 #### Explicação do Código
+
 1. **`Comparator.comparing`**:
-   - Utiliza um método de referência para comparar um atributo específico dos objetos na Stream.
+    - Utiliza um método de referência para comparar um atributo específico dos objetos na Stream.
 
 2. **`Comparator.reversed()`**:
-   - Inverte a ordem natural definida pelo `Comparator` original.
+    - Inverte a ordem natural definida pelo `Comparator` original.
 
 #### Saída Esperada
+
 Com base em dados fictícios, a saída pode ser:
+
 ```java
-Students sorted by name: 
-[Student{name='Aline'}, Student{name='Marcos'}, Student{name='Olivia'}, ...]
+Students sorted
+by name:
+        [
 
-Students sorted by GPA: 
-[Student{name='Marcos', gpa=3.2}, Student{name='Aline', gpa=3.5}, ...]
+Student {
+    name = 'Aline'
+},
 
-Students sorted by GPA Reversed: 
-[Student{name='Olivia', gpa=4.0}, Student{name='Aline', gpa=3.5}, ...]
+Student {
+    name = 'Marcos'
+},
+
+Student {
+    name = 'Olivia'
+},...]
+
+Students sorted
+by GPA:
+        [
+
+Student {
+    name = 'Marcos', gpa = 3.2
+},
+
+Student {
+    name = 'Aline', gpa = 3.5
+},...]
+
+Students sorted
+by GPA
+Reversed:
+        [
+
+Student {
+    name = 'Olivia', gpa = 4.0
+},
+
+Student {
+    name = 'Aline', gpa = 3.5
+},...]
 ```
 
 #### Pontos-Chave:
+
 - Ordenações personalizadas ajudam a organizar os dados conforme critérios de negócio.
-- `Comparator` é flexível e permite composição com métodos como `.reversed()` e `.thenComparing()` para critérios adicionais.
-- O uso de Streams evita a necessidade de manipulação manual de listas para ordenação, tornando o código mais conciso e legível.
-
-
-
+- `Comparator` é flexível e permite composição com métodos como `.reversed()` e `.thenComparing()` para critérios
+  adicionais.
+- O uso de Streams evita a necessidade de manipulação manual de listas para ordenação, tornando o código mais conciso e
+  legível.
 
 ### Stream Operation - filter()
 
 #### Descrição
-O método `.filter()` é utilizado para processar elementos de uma Stream que atendam a um critério específico, definido através de um `Predicate`. Ele realiza uma operação de filtragem que retorna uma Stream contendo apenas os elementos que satisfazem o predicado fornecido.
+
+O método `.filter()` é utilizado para processar elementos de uma Stream que atendam a um critério específico, definido
+através de um `Predicate`. Ele realiza uma operação de filtragem que retorna uma Stream contendo apenas os elementos que
+satisfazem o predicado fornecido.
 
 #### Características
+
 1. **Input**:
-  - O `.filter()` aceita como argumento um `Predicate<T>`, uma interface funcional que avalia cada elemento e retorna um valor booleano.
+
+- O `.filter()` aceita como argumento um `Predicate<T>`, uma interface funcional que avalia cada elemento e retorna um
+  valor booleano.
 
 2. **Comportamento**:
-  - A operação é intermediária, ou seja, pode ser encadeada com outras operações.
-  - A filtragem não modifica os elementos da Stream original, apenas determina quais serão incluídos na nova Stream.
+
+- A operação é intermediária, ou seja, pode ser encadeada com outras operações.
+- A filtragem não modifica os elementos da Stream original, apenas determina quais serão incluídos na nova Stream.
 
 3. **Exemplo**:
    Filtrando estudantes do gênero feminino e com GPA maior ou igual a 4.
@@ -1862,46 +1960,61 @@ O método `.filter()` é utilizado para processar elementos de uma Stream que at
    ```
 
 4. **Chaining**:
-   -  O `.filter()` pode ser encadeado com outros filtros para aplicar vários critérios ao mesmo tempo.
+    - O `.filter()` pode ser encadeado com outros filtros para aplicar vários critérios ao mesmo tempo.
    ```java
    .filter(femaleStudents)
    .filter(gpaGreaterThanFour)
    ```
 
 #### Saída Esperada
+
 Com base em uma base de dados fictícia de estudantes:
+
 ```plaintext
 Student{name='Aline', gender='female', gpa=4.2}
 Student{name='Olivia', gender='female', gpa=4.5}
 ```
 
 #### Pontos-Técnicos Importantes
+
 1. **Avaliação Lazy**:
-  - O `.filter()` é avaliado de forma lazy, ou seja, os elementos são processados apenas quando uma operação terminal é invocada.
+
+- O `.filter()` é avaliado de forma lazy, ou seja, os elementos são processados apenas quando uma operação terminal é
+  invocada.
 
 2. **Eficiência**:
-  - Como as Streams utilizam pipelines, o `.filter()` processa um elemento por vez, o que pode melhorar a eficiência em grandes coleções.
+
+- Como as Streams utilizam pipelines, o `.filter()` processa um elemento por vez, o que pode melhorar a eficiência em
+  grandes coleções.
 
 3. **Predicados Combinados**:
-  - O `.filter()` pode utilizar múltiplos predicados combinados com os métodos `.and()`, `.or()` e `.negate()` para criar critérios complexos de filtragem.
+
+- O `.filter()` pode utilizar múltiplos predicados combinados com os métodos `.and()`, `.or()` e `.negate()` para criar
+  critérios complexos de filtragem.
 
    ```java
    femaleStudents.and(gpaGreaterThanFour);
-   femaleStudents.or(gpaGreaterThanFour);
-   femaleStudents.negate();
+   femaleStudents.
+
+or(gpaGreaterThanFour);
+   femaleStudents.
+
+negate();
    ```
 
 #### Quando Utilizar?
+
 - Ao trabalhar com coleções ou dados em que é necessário extrair apenas um subconjunto baseado em regras lógicas claras.
 
 #### Benefícios
+
 - Simplifica a lógica de filtragem.
 - Reduz o uso de loops explicitamente definidos.
 - Melhora a legibilidade e manutenção do código.
 
-
 ### Stream Operation - reduce()
- É uma operação terminal. Utilizada para reduzir os conteúdos de uma stream para um único valor
+
+É uma operação terminal. Utilizada para reduzir os conteúdos de uma stream para um único valor
 
 Recebe dois parametros como um input
 Primeiro parametro - default ou valor inicial
@@ -1953,38 +2066,41 @@ public class StreamReduceExample {
         System.out.println("Estudante com o maior GPA é:  " + getStudentWithHighestGpa().get());
 
     }
+
 }
-
-
-
 
 ### Stream Operation - Map + Filter + Reduce Pattern
 
-
-
 ### Stream Operation - max() using reduce() function
-No Java 8, a API de Streams introduziu operações funcionais que permitem processar coleções de maneira declarativa. Entre essas operações, a função `reduce()` é utilizada para agregar os elementos de um stream em um único valor. Embora existam métodos específicos como `max()` e `min()` para encontrar o maior e o menor valor em um stream, também podemos implementar essa funcionalidade utilizando `reduce()`.
+
+No Java 8, a API de Streams introduziu operações funcionais que permitem processar coleções de maneira declarativa.
+Entre essas operações, a função `reduce()` é utilizada para agregar os elementos de um stream em um único valor. Embora
+existam métodos específicos como `max()` e `min()` para encontrar o maior e o menor valor em um stream, também podemos
+implementar essa funcionalidade utilizando `reduce()`.
 
 ## Implementação de `max()` com `reduce()`
 
-Para encontrar o valor máximo em uma lista de inteiros usando `reduce()`, podemos definir uma função que compara dois elementos e retorna o maior entre eles.
+Para encontrar o valor máximo em uma lista de inteiros usando `reduce()`, podemos definir uma função que compara dois
+elementos e retorna o maior entre eles.
 
 ```java
 public static Optional<Integer> maxValueOptional(List<Integer> integerList) {
-  return integerList.stream()
-          .reduce((currentMax, nextElement) -> currentMax > nextElement ? currentMax : nextElement);
+    return integerList.stream()
+            .reduce((currentMax, nextElement) -> currentMax > nextElement ? currentMax : nextElement);
 }
 ```
+
 Explicação:
 
 Stream: Iniciamos um stream a partir da lista de inteiros.
 
-Reduce: Aplicamos a função reduce() que recebe um BinaryOperator. Este operador compara o valor máximo atual (currentMax) com o próximo elemento (nextElement) e retorna o maior dos dois.
+Reduce: Aplicamos a função reduce() que recebe um BinaryOperator. Este operador compara o valor máximo atual (
+currentMax) com o próximo elemento (nextElement) e retorna o maior dos dois.
 
 Resultado: O resultado é um Optional<Integer> que contém o valor máximo, caso exista.
 
-
 ### Stream Operation - min() using reduce() function
+
 De maneira semelhante, podemos encontrar o valor mínimo em uma lista de inteiros utilizando reduce().
 
 ```java
@@ -1993,18 +2109,24 @@ public static Optional<Integer> minValueOptional(List<Integer> integerList) {
             .reduce((currentMin, nextElement) -> currentMin < nextElement ? currentMin : nextElement);
 }
 ```
+
 Explicação:
 
 Stream: Iniciamos um stream a partir da lista de inteiros.
 
-Reduce: Aplicamos a função reduce() com um BinaryOperator que compara o valor mínimo atual (currentMin) com o próximo elemento (nextElement) e retorna o menor dos dois.
+Reduce: Aplicamos a função reduce() com um BinaryOperator que compara o valor mínimo atual (currentMin) com o próximo
+elemento (nextElement) e retorna o menor dos dois.
 
 Resultado: O resultado é um Optional<Integer> que contém o valor mínimo, caso exista.
 
 #### Considerações sobre o Uso de Identidade
-A função reduce() possui uma sobrecarga que aceita um valor de identidade. Este valor serve como ponto de partida e identidade para a operação de redução. No entanto, ao procurar o valor máximo ou mínimo, é importante escolher um valor de identidade apropriado.
+
+A função reduce() possui uma sobrecarga que aceita um valor de identidade. Este valor serve como ponto de partida e
+identidade para a operação de redução. No entanto, ao procurar o valor máximo ou mínimo, é importante escolher um valor
+de identidade apropriado.
 
 Por exemplo, ao buscar o valor mínimo, poderíamos usar Integer.MAX_VALUE como identidade:
+
 ```java
 public static int minValueWithIdentity(List<Integer> integerList) {
     return integerList.stream()
@@ -2012,39 +2134,101 @@ public static int minValueWithIdentity(List<Integer> integerList) {
 }
 
 ```
-
-
 ### Stream Operation - limit() and skip()
+
+As operações `limit()` e `skip()` ajudam a criar uma sub-stream que processa apenas parte dos elementos da stream original.
+
+#### limit(n)
+A operação `limit(n)` restringe o número de elementos processados na stream para no máximo `n`. Ou seja, só os `n` primeiros elementos são considerados nas operações subsequentes.
+
+- **Exemplo**: Se tivermos uma stream com 10 elementos e aplicarmos `.limit(5)`, apenas os primeiros cinco elementos serão processados.
+
+#### skip(n)
+A operação `skip(n)` ignora os primeiros `n` elementos da stream e processa apenas os restantes. Essa é uma forma útil de "pular" um conjunto inicial de dados.
+
+- **Exemplo**: Se tivermos uma stream com 10 elementos e aplicarmos `.skip(3)`, os três primeiros elementos serão ignorados, e as operações subsequentes serão realizadas nos sete elementos restantes.
+
+#### Exemplo de Implementação em Java
+
+```java
+package com.technical.streams;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class StreamLimitSkipExample {
+
+    public static Optional<Integer> sumLimit(List<Integer> integerList) {
+        return integerList.stream()
+                .limit(2) // Limita a stream aos dois primeiros elementos
+                .reduce(Integer::sum); // Soma os elementos restantes
+    }
+
+    public static Optional<Integer> sumSkip(List<Integer> integerList) {
+        return integerList.stream()
+                .skip(2) // Pula os dois primeiros elementos
+                .reduce(Integer::sum); // Soma os elementos restantes
+    }
+
+    public static void main(String[] args) {
+        List<Integer> integerList = Arrays.asList(6, 7, 8, 9, 10);
+
+        System.out.println("Sum limit: " + sumLimit(integerList));
+        // Saída: Optional[13] (soma dos dois primeiros elementos: 6 + 7)
+
+        System.out.println("Sum skip: " + sumSkip(integerList));
+        // Saída: Optional[27] (soma dos elementos após os dois primeiros: 8 + 9 + 10)
+    }
+}
+```
+
+#### Saída do Programa
+```plaintext
+Sum limit: Optional[13]
+Sum skip: Optional[27]
+```
+
+#### Explicação
+1. **`limit(2)`**: Reduz a stream original às duas primeiras entradas (6 e 7). Essas entradas são somadas e o resultado é retornado como `Optional[13]`.
+
+2. **`skip(2)`**: Ignora as duas primeiras entradas (6 e 7) da stream original. As entradas restantes (8, 9 e 10) são somadas, resultando em `Optional[27]`.
+
+Essas operações são úteis para manipulação de streams, permitindo filtrar ou dividir dados de forma eficiente. Elas podem ser combinadas com outras operações como `map`, `filter` e `reduce` para criar pipelines de processamento mais complexos.
 
 
 
 ### Stream Operation - allMatch(), anyMatch and noneMatch()
 
-
-
-### Stream Operation  - findAny() and findFirst()
-
-
-
+### Stream Operation - findAny() and findFirst()
 
 # Comparação: Collections vs. Streams
 
 ## Collections
+
 1. **Modificáveis**: Permitem adicionar ou modificar elementos a qualquer momento.
-  - Exemplo: `list.add(<element>)`
+
+- Exemplo: `list.add(<element>)`
+
 2. **Acesso em qualquer ordem**: Os elementos podem ser acessados em qualquer ordem, dependendo do tipo de coleção.
-  - Exemplo: `list.get(4)`
-3. **Construção antecipada (Eager Construction)**: As coleções são preenchidas antecipadamente com os valores. É necessário popular a coleção antes de manipulá-la.
+
+- Exemplo: `list.get(4)`
+
+3. **Construção antecipada (Eager Construction)**: As coleções são preenchidas antecipadamente com os valores. É
+   necessário popular a coleção antes de manipulá-la.
 4. **Iteração múltipla**: É possível iterar sobre os elementos "n" vezes.
 5. **Iteração externa**: A responsabilidade pela iteração recai no código do cliente.
-  - Exemplo: Usando `for` ou `while`.
+
+- Exemplo: Usando `for` ou `while`.
 
 ---
 
 ## Streams
+
 1. **Imutáveis**: Não permitem adicionar ou modificar elementos. A Stream representa um conjunto fixo de dados.
 2. **Acesso sequencial**: Os elementos só podem ser acessados em sequência.
-3. **Construção sob demanda (Lazy Construction)**: As Streams só realizam operações quando necessário (avaliação preguiçosa).
+3. **Construção sob demanda (Lazy Construction)**: As Streams só realizam operações quando necessário (avaliação
+   preguiçosa).
 4. **Iteração única**: As Streams só podem ser consumidas uma vez. Tentativas subsequentes resultam em erro.
 5. **Iteração interna**: A Stream gerencia automaticamente a iteração sobre os elementos.
 
@@ -2099,31 +2283,37 @@ public class CollectionsVsStream {
 
 ## Debugando Streams
 
-Streams são projetadas para serem processadas de forma "lazy" (sob demanda) e muitas vezes não possuem um estado explícito
+Streams são projetadas para serem processadas de forma "lazy" (sob demanda) e muitas vezes não possuem um estado
+explícito
 para inspeção. No entanto, existem técnicas para facilitar o debug de Streams em Java. Aqui estão algumas estratégias:
 
 ---
 
 ### 1. **Uso do `peek`**
-O método `peek` permite inspecionar os elementos da Stream em diferentes estágios sem modificar os dados. É ideal para fins de debug.
+
+O método `peek` permite inspecionar os elementos da Stream em diferentes estágios sem modificar os dados. É ideal para
+fins de debug.
 
 Adicione chamadas de `peek` entre as operações intermediárias para observar os elementos:
 
 ```java
 Map<String, List<String>> studentMap = students.stream()
-    .peek(student -> System.out.println("Original: " + student))
-    .filter(gradeLevelGreaterThanThree)
-    .peek(student -> System.out.println("Após gradeLevelGreaterThanThree: " + student))
-    .filter(GpaGreaterThanThreeDotNine)
-    .peek(student -> System.out.println("Após GpaGreaterThanThreeDotNine: " + student))
-    .collect(Collectors.toMap(Student::getName, Student::getActivities));
+        .peek(student -> System.out.println("Original: " + student))
+        .filter(gradeLevelGreaterThanThree)
+        .peek(student -> System.out.println("Após gradeLevelGreaterThanThree: " + student))
+        .filter(GpaGreaterThanThreeDotNine)
+        .peek(student -> System.out.println("Após GpaGreaterThanThreeDotNine: " + student))
+        .collect(Collectors.toMap(Student::getName, Student::getActivities));
 
-System.out.println(studentMap);
+System.out.
+
+println(studentMap);
 ```
 
 ---
 
 ### 2. **Adicionar Logs**
+
 Outra abordagem é adicionar logs nos predicados ou funções lambda utilizadas nas operações da Stream. Por exemplo:
 
 ```java
@@ -2143,44 +2333,58 @@ static Predicate<Student> GpaGreaterThanThreeDotNine = student -> {
 ---
 
 ### 3. **Utilizar Ferramentas de Depuração (IDE)**
+
 A maioria das IDEs modernas, como IntelliJ IDEA ou Eclipse, oferece suporte ao debug de Streams com:
 
-- **Breakpoints Condicionais**: Podemos adicionar breakpoints em lambdas ou operações específicas para inspecionar os dados.
+- **Breakpoints Condicionais**: Podemos adicionar breakpoints em lambdas ou operações específicas para inspecionar os
+  dados.
 - **Expression Evaluation**: Durante o debug, avalie expressões para ver os resultados de operações intermediárias.
 
 ---
 
 ### 4. **Converter em Estruturas Intermediárias**
-Se o debug direto for complicado, uma abordagem alternativa é dividir as operações da Stream em etapas intermediárias e salvar os resultados em coleções temporárias para inspecionar os dados.
+
+Se o debug direto for complicado, uma abordagem alternativa é dividir as operações da Stream em etapas intermediárias e
+salvar os resultados em coleções temporárias para inspecionar os dados.
 
 ```java
 List<Student> filteredByGrade = students.stream()
-    .filter(gradeLevelGreaterThanThree)
-    .collect(Collectors.toList());
+        .filter(gradeLevelGreaterThanThree)
+        .collect(Collectors.toList());
 
-System.out.println("Após filtro de gradeLevel >= 3: " + filteredByGrade);
+System.out.
+
+println("Após filtro de gradeLevel >= 3: "+filteredByGrade);
 
 List<Student> filteredByGpa = filteredByGrade.stream()
-    .filter(GpaGreaterThanThreeDotNine)
-    .collect(Collectors.toList());
+        .filter(GpaGreaterThanThreeDotNine)
+        .collect(Collectors.toList());
 
-System.out.println("Após filtro de GPA >= 3.9: " + filteredByGpa);
+System.out.
+
+println("Após filtro de GPA >= 3.9: "+filteredByGpa);
 
 Map<String, List<String>> studentMap = filteredByGpa.stream()
-    .collect(Collectors.toMap(Student::getName, Student::getActivities));
+        .collect(Collectors.toMap(Student::getName, Student::getActivities));
 
-System.out.println(studentMap);
+System.out.
+
+println(studentMap);
 ```
 
 ---
 
 ### 5. **Uso de Bibliotecas de Debug**
-Existem bibliotecas como [StreamEx](https://github.com/amaembo/streamex) que estendem as funcionalidades das Streams e adicionam métodos úteis para debug.
+
+Existem bibliotecas como [StreamEx](https://github.com/amaembo/streamex) que estendem as funcionalidades das Streams e
+adicionam métodos úteis para debug.
 
 ---
 
 ### Resumo
+
 Para debug de Streams:
+
 1. Use `peek` para inspecionar elementos.
 2. Adicione logs em predicados ou lambdas.
 3. Aproveite as ferramentas de depuração da IDE.
