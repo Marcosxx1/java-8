@@ -47,6 +47,7 @@
     - [Stream Operation - limit() and skip()](#stream-operation---limit-and-skip)
     - [Stream Operation - allMatch(), anyMatch and noneMatch()](#stream-operation---allmatch-anymatch-and-nonematch)
     - [Stream Operation - findAny() and findFirst()](#stream-operation---findany-and-findfirst)
+    - [Short Circuit Operations](#short-circuit-operations)
 
 - [Comparação: Collections vs. Streams](#comparação-collections-vs-streams)
 - [Debugando Streams](#debugando-streams)
@@ -1836,7 +1837,9 @@ A operação `.sorted()` em Streams permite organizar elementos de acordo com um
     return StudentDataBase.getAllStudents().stream()
             .sorted(Comparator.comparing(Student::getName))
             .toList();
+
 }
+
    ```
 
 2. **Ordenação por GPA**:
@@ -1860,7 +1863,9 @@ A operação `.sorted()` em Streams permite organizar elementos de acordo com um
     return StudentDataBase.getAllStudents().stream()
             .sorted(Comparator.comparing(Student::getName).reversed())
             .toList();
+
 }
+
    ```
 
 #### Explicação do Código
@@ -1997,9 +2002,10 @@ Student{name='Olivia', gender='female', gpa=4.5}
    femaleStudents.
 
 or(gpaGreaterThanFour);
-   femaleStudents.
+femaleStudents.
 
 negate();
+
    ```
 
 #### Quando Utilizar?
@@ -2134,19 +2140,27 @@ public static int minValueWithIdentity(List<Integer> integerList) {
 }
 
 ```
+
 ### Stream Operation - limit() and skip()
 
-As operações `limit()` e `skip()` ajudam a criar uma sub-stream que processa apenas parte dos elementos da stream original.
+As operações `limit()` e `skip()` ajudam a criar uma sub-stream que processa apenas parte dos elementos da stream
+original.
 
 #### limit(n)
-A operação `limit(n)` restringe o número de elementos processados na stream para no máximo `n`. Ou seja, só os `n` primeiros elementos são considerados nas operações subsequentes.
 
-- **Exemplo**: Se tivermos uma stream com 10 elementos e aplicarmos `.limit(5)`, apenas os primeiros cinco elementos serão processados.
+A operação `limit(n)` restringe o número de elementos processados na stream para no máximo `n`. Ou seja, só os `n`
+primeiros elementos são considerados nas operações subsequentes.
+
+- **Exemplo**: Se tivermos uma stream com 10 elementos e aplicarmos `.limit(5)`, apenas os primeiros cinco elementos
+  serão processados.
 
 #### skip(n)
-A operação `skip(n)` ignora os primeiros `n` elementos da stream e processa apenas os restantes. Essa é uma forma útil de "pular" um conjunto inicial de dados.
 
-- **Exemplo**: Se tivermos uma stream com 10 elementos e aplicarmos `.skip(3)`, os três primeiros elementos serão ignorados, e as operações subsequentes serão realizadas nos sete elementos restantes.
+A operação `skip(n)` ignora os primeiros `n` elementos da stream e processa apenas os restantes. Essa é uma forma útil
+de "pular" um conjunto inicial de dados.
+
+- **Exemplo**: Se tivermos uma stream com 10 elementos e aplicarmos `.skip(3)`, os três primeiros elementos serão
+  ignorados, e as operações subsequentes serão realizadas nos sete elementos restantes.
 
 #### Exemplo de Implementação em Java
 
@@ -2184,31 +2198,40 @@ public class StreamLimitSkipExample {
 ```
 
 #### Saída do Programa
+
 ```plaintext
 Sum limit: Optional[13]
 Sum skip: Optional[27]
 ```
 
 #### Explicação
-1. **`limit(2)`**: Reduz a stream original às duas primeiras entradas (6 e 7). Essas entradas são somadas e o resultado é retornado como `Optional[13]`.
 
-2. **`skip(2)`**: Ignora as duas primeiras entradas (6 e 7) da stream original. As entradas restantes (8, 9 e 10) são somadas, resultando em `Optional[27]`.
+1. **`limit(2)`**: Reduz a stream original às duas primeiras entradas (6 e 7). Essas entradas são somadas e o resultado
+   é retornado como `Optional[13]`.
 
-Essas operações são úteis para manipulação de streams, permitindo filtrar ou dividir dados de forma eficiente. Elas podem ser combinadas com outras operações como `map`, `filter` e `reduce` para criar pipelines de processamento mais complexos.
+2. **`skip(2)`**: Ignora as duas primeiras entradas (6 e 7) da stream original. As entradas restantes (8, 9 e 10) são
+   somadas, resultando em `Optional[27]`.
 
-
+Essas operações são úteis para manipulação de streams, permitindo filtrar ou dividir dados de forma eficiente. Elas
+podem ser combinadas com outras operações como `map`, `filter` e `reduce` para criar pipelines de processamento mais
+complexos.
 
 ### Stream Operation - allMatch(), anyMatch and noneMatch()
 
-As operações `allMatch()`, `anyMatch()` e `noneMatch()` são usadas para verificar se os elementos de uma stream atendem a um predicado especificado. Elas recebem um `Predicate<>` como entrada e retornam um valor booleano baseado na avaliação dos elementos.
+As operações `allMatch()`, `anyMatch()` e `noneMatch()` são usadas para verificar se os elementos de uma stream atendem
+a um predicado especificado. Elas recebem um `Predicate<>` como entrada e retornam um valor booleano baseado na
+avaliação dos elementos.
 
 #### .allMatch()
+
 Retorna `true` se **todos** os elementos da stream atenderem ao predicado especificado. Caso contrário, retorna `false`.
 
 #### .anyMatch()
+
 Retorna `true` se **algum** elemento da stream atender ao predicado especificado. Caso contrário, retorna `false`.
 
 #### .noneMatch()
+
 Retorna `true` se **nenhum** elemento da stream atender ao predicado especificado. Caso contrário, retorna `false`.
 
 ### Exemplo de Implementação em Java
@@ -2241,13 +2264,13 @@ public class StreamsMatchExample {
     }
 
     public static void main(String[] args) {
-        System.out.println("AllMatch : " + allMatch()); 
+        System.out.println("AllMatch : " + allMatch());
         // Deve retornar false, pois nem todos os estudantes têm GPA maior ou igual a 3.9
 
-        System.out.println("AnyMatch : " + anyMatch()); 
+        System.out.println("AnyMatch : " + anyMatch());
         // Deve retornar true, pois pelo menos um estudante tem GPA maior ou igual a 3.9
 
-        System.out.println("NoneMatch : " + noneMatch()); 
+        System.out.println("NoneMatch : " + noneMatch());
         // Deve retornar false, pois existem estudantes com GPA maior ou igual a 3.9
     }
 }
@@ -2256,16 +2279,80 @@ public class StreamsMatchExample {
 ### Resumo das Operações
 
 - **`allMatch()`**: Verifica se todos os elementos satisfazem o predicado.
-  - Exemplo: Todos os estudantes têm GPA maior ou igual a 3.9? **Resultado esperado: false**.
+    - Exemplo: Todos os estudantes têm GPA maior ou igual a 3.9? **Resultado esperado: false**.
 
 - **`anyMatch()`**: Verifica se algum elemento satisfaz o predicado.
-  - Exemplo: Algum estudante tem GPA maior ou igual a 3.9? **Resultado esperado: true**.
+    - Exemplo: Algum estudante tem GPA maior ou igual a 3.9? **Resultado esperado: true**.
 
 - **`noneMatch()`**: Verifica se nenhum elemento satisfaz o predicado.
-  - Exemplo: Nenhum estudante tem GPA maior ou igual a 3.9? **Resultado esperado: false**.
-
+    - Exemplo: Nenhum estudante tem GPA maior ou igual a 3.9? **Resultado esperado: false**.
 
 ### Stream Operation - findAny() and findFirst()
+
+As operações `findAny()` e `findFirst()` são usadas para localizar elementos em uma stream e ambas retornam um
+`Optional<T>`,
+que pode ou não conter um valor:
+
+`.findFirst()`: Retorna o primeiro elemento da stream que atende ao critério especificado (após a filtragem).
+`.findAny()`: Retorna qualquer elemento da stream que atenda ao critério especificado. Ela pode retornar o primeiro ou
+qualquer outro, dependendo de como a stream é processada internamente.
+
+```java
+package com.technical.streams;
+
+import com.technical.data.Student;
+import com.technical.data.StudentDataBase;
+
+import java.util.List;
+import java.util.Optional;
+
+public class StreamsFindAnyFirstExample {
+
+    public static List<Student> students = StudentDataBase.getAllStudents();
+
+    public static Optional<Student> findFirst() {
+        return students.stream()
+                .filter(student -> student.getGpa() >= 3.9)
+                .findFirst(); // Retorna o primeiro estudante que atende ao critério
+    }
+
+    public static Optional<Student> findAny() {
+        return students.stream() // Encontra qualquer estudante que atenda ao critério
+                .filter(student -> student.getGpa() >= 3.9)
+                .findAny();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("findAny() :" + findAny());  // Pode retornar qualquer estudante com GPA >= 3.9
+        System.out.println("findFirst() :" + findFirst());  // Retorna o primeiro estudante com GPA >= 3.9
+    }
+}
+
+```
+
+## Short Circuit Operations
+
+Como exemplo básico de `short ciruit operations`:
+
+```java
+if(boolean1 &&boolean2){
+        //fazemos algo
+        };
+
+        if(boolean1 ||boolean2){
+        //fazemos algo
+        };
+```
+
+Com && (AND): A expressão é avaliada da esquerda para a direita. Se a primeira condição (boolean1) for false, a segunda
+condição (boolean2) não será verificada, pois a expressão já retornaria false de qualquer forma.
+
+Com || (OR): A expressão é avaliada da esquerda para a direita. Se a primeira condição (boolean1) for true, a segunda
+condição (boolean2) não será verificada, pois a expressão já retornaria true de qualquer forma.
+
+Vantagens do Short Circuit:
+Essas operações são eficientes, pois evitam a avaliação desnecessária de expressões quando o resultado já pode ser
+determinado pela primeira condição.
 
 # Comparação: Collections vs. Streams
 
