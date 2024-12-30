@@ -2200,6 +2200,71 @@ Essas operações são úteis para manipulação de streams, permitindo filtrar 
 
 ### Stream Operation - allMatch(), anyMatch and noneMatch()
 
+As operações `allMatch()`, `anyMatch()` e `noneMatch()` são usadas para verificar se os elementos de uma stream atendem a um predicado especificado. Elas recebem um `Predicate<>` como entrada e retornam um valor booleano baseado na avaliação dos elementos.
+
+#### .allMatch()
+Retorna `true` se **todos** os elementos da stream atenderem ao predicado especificado. Caso contrário, retorna `false`.
+
+#### .anyMatch()
+Retorna `true` se **algum** elemento da stream atender ao predicado especificado. Caso contrário, retorna `false`.
+
+#### .noneMatch()
+Retorna `true` se **nenhum** elemento da stream atender ao predicado especificado. Caso contrário, retorna `false`.
+
+### Exemplo de Implementação em Java
+
+```java
+package com.technical.streams;
+
+import com.technical.data.Student;
+import com.technical.data.StudentDataBase;
+
+import java.util.List;
+
+public class StreamsMatchExample {
+
+    public static List<Student> students = StudentDataBase.getAllStudents();
+
+    public static Boolean allMatch() {
+        return students.stream()
+                .allMatch(student -> student.getGpa() >= 3.9);
+    }
+
+    public static Boolean anyMatch() {
+        return students.stream()
+                .anyMatch(student -> student.getGpa() >= 3.9);
+    }
+
+    public static Boolean noneMatch() {
+        return students.stream()
+                .noneMatch(student -> student.getGpa() >= 3.9);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("AllMatch : " + allMatch()); 
+        // Deve retornar false, pois nem todos os estudantes têm GPA maior ou igual a 3.9
+
+        System.out.println("AnyMatch : " + anyMatch()); 
+        // Deve retornar true, pois pelo menos um estudante tem GPA maior ou igual a 3.9
+
+        System.out.println("NoneMatch : " + noneMatch()); 
+        // Deve retornar false, pois existem estudantes com GPA maior ou igual a 3.9
+    }
+}
+```
+
+### Resumo das Operações
+
+- **`allMatch()`**: Verifica se todos os elementos satisfazem o predicado.
+  - Exemplo: Todos os estudantes têm GPA maior ou igual a 3.9? **Resultado esperado: false**.
+
+- **`anyMatch()`**: Verifica se algum elemento satisfaz o predicado.
+  - Exemplo: Algum estudante tem GPA maior ou igual a 3.9? **Resultado esperado: true**.
+
+- **`noneMatch()`**: Verifica se nenhum elemento satisfaz o predicado.
+  - Exemplo: Nenhum estudante tem GPA maior ou igual a 3.9? **Resultado esperado: false**.
+
+
 ### Stream Operation - findAny() and findFirst()
 
 # Comparação: Collections vs. Streams
