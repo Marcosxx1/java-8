@@ -1963,11 +1963,55 @@ public class StreamReduceExample {
 
 
 ### Stream Operation - max() using reduce() function
+No Java 8, a API de Streams introduziu operações funcionais que permitem processar coleções de maneira declarativa. Entre essas operações, a função `reduce()` é utilizada para agregar os elementos de um stream em um único valor. Embora existam métodos específicos como `max()` e `min()` para encontrar o maior e o menor valor em um stream, também podemos implementar essa funcionalidade utilizando `reduce()`.
 
+## Implementação de `max()` com `reduce()`
+
+Para encontrar o valor máximo em uma lista de inteiros usando `reduce()`, podemos definir uma função que compara dois elementos e retorna o maior entre eles.
+
+```java
+public static Optional<Integer> maxValueOptional(List<Integer> integerList) {
+  return integerList.stream()
+          .reduce((currentMax, nextElement) -> currentMax > nextElement ? currentMax : nextElement);
+}
+```
+Explicação:
+
+Stream: Iniciamos um stream a partir da lista de inteiros.
+
+Reduce: Aplicamos a função reduce() que recebe um BinaryOperator. Este operador compara o valor máximo atual (currentMax) com o próximo elemento (nextElement) e retorna o maior dos dois.
+
+Resultado: O resultado é um Optional<Integer> que contém o valor máximo, caso exista.
 
 
 ### Stream Operation - min() using reduce() function
+De maneira semelhante, podemos encontrar o valor mínimo em uma lista de inteiros utilizando reduce().
 
+```java
+public static Optional<Integer> minValueOptional(List<Integer> integerList) {
+    return integerList.stream()
+            .reduce((currentMin, nextElement) -> currentMin < nextElement ? currentMin : nextElement);
+}
+```
+Explicação:
+
+Stream: Iniciamos um stream a partir da lista de inteiros.
+
+Reduce: Aplicamos a função reduce() com um BinaryOperator que compara o valor mínimo atual (currentMin) com o próximo elemento (nextElement) e retorna o menor dos dois.
+
+Resultado: O resultado é um Optional<Integer> que contém o valor mínimo, caso exista.
+
+#### Considerações sobre o Uso de Identidade
+A função reduce() possui uma sobrecarga que aceita um valor de identidade. Este valor serve como ponto de partida e identidade para a operação de redução. No entanto, ao procurar o valor máximo ou mínimo, é importante escolher um valor de identidade apropriado.
+
+Por exemplo, ao buscar o valor mínimo, poderíamos usar Integer.MAX_VALUE como identidade:
+```java
+public static int minValueWithIdentity(List<Integer> integerList) {
+    return integerList.stream()
+            .reduce(Integer.MAX_VALUE, (currentMin, nextElement) -> currentMin < nextElement ? currentMin : nextElement);
+}
+
+```
 
 
 ### Stream Operation - limit() and skip()
