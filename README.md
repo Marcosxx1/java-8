@@ -40,7 +40,7 @@
     - [Stream Operation - distinct(), count(), sorted()](#stream-operation---distinct-count-sorted)
     - [Stream Operation - Customized sort using comparator](#stream-operation---customized-sort-using-comparator)
     - [Stream Operation - filter()](#stream-operation---filter)
-    - [Stream Operation - reduce()](#stream-operation---reduce)
+    - [Stream Operation - reduce()](#stream-)
     - [Stream Operation - Map + Filter + Reduce Pattern](#stream-operation---map--filter--reduce-pattern)
     - [Stream Operation - max() using reduce() function](#stream-operation---max-using-reduce-function)
     - [Stream Operation - min() using reduce() function](#stream-operation---min-using-reduce-function)
@@ -48,7 +48,14 @@
     - [Stream Operation - allMatch(), anyMatch and noneMatch()](#stream-operation---allmatch-anymatch-and-nonematch)
     - [Stream Operation - findAny() and findFirst()](#stream-operation---findany-and-findfirst)
     - [Short Circuit Operations](#short-circuit-operations)
-
+    - [Exemplos de Operações com Streams: `Stream.of()`,
+      `Stream.iterate()` e `Stream.generate()](#exemplos-de-operações-com-streams-streamof-streamiterate-e-streamgenerate)
+- [Introdução à API de Streams Numéricas](#introdução-à-api-de-streams-numéricas)
+  - [Funções de Agragação](#funções-de-agragação)
+    - [Sum](#sum)
+    - [Max](#max)
+    - [Min](#min)
+    - [Average](#average)
 - [Comparação: Collections vs. Streams](#comparação-collections-vs-streams)
 - [Debugando Streams](#debugando-streams)
 - [](#)
@@ -61,15 +68,16 @@
 - **Relacionamento com POO**: É o estilo predominante na Programação Orientada a Objetos clássica.
 
 ```java
-List<Integer> quantities = Arrays.asList(10, 20, 15, 30);
-int total = 0;
-for(
-int quantity :quantities){
-total +=quantity;
+public class Ex {
+    public static void main(String[] args) {
+        List<Integer> quantities = Arrays.asList(10, 20, 15, 30);
+        int total = 0;
+        for (int quantity : quantities) {
+            total += quantity;
+        }
+        System.out.println("Total de produtos: " + total);
+    }
 }
-        System.out.
-
-println("Total de produtos: "+total);
 
 ```
 
@@ -181,29 +189,31 @@ Exemplos antes e depois do Java 8
 Antes:
 
 ```java
+  public class Ex {
+
+    public static void main(String[] args) {
         Runnable runnable = new Runnable() {
-    @Override
-    public void run() {
-        System.out.println("Inside Runnable");
+            @Override
+            public void run() {
+                System.out.println("Inside Runnable");
+            }
+        };
+
+        new Thread(runnable).start();
     }
-};
-
-        new
-
-Thread(runnable).
-
-start();
+}
 ```
 
 depois:
 
 ```java
-Runnable runnable = () -> System.out.println("Inside Runnable");
-    new
+public class Ex {
 
-Thread(runnable).
-
-start();
+    public static void main(String[] args) {
+        Runnable runnable = () -> System.out.println("Inside Runnable");
+        new Thread(runnable).start();
+    }
+}
 ```
 
 Lembrando que quando é apenas uma declaração podemos utilizar sem as {}, Ex:
@@ -2004,9 +2014,7 @@ Student{name='Olivia', gender='female', gpa=4.5}
 or(gpaGreaterThanFour);
 femaleStudents.
 
-negate();
-
-   ```
+#### negate();
 
 #### Quando Utilizar?
 
@@ -2026,6 +2034,7 @@ Recebe dois parametros como um input
 Primeiro parametro - default ou valor inicial
 Segundo parametro - BinaryOperator<T>
 
+```java
 package com.technical.streams;
 
 import com.technical.data.Student;
@@ -2073,7 +2082,8 @@ public class StreamReduceExample {
 
     }
 
-}
+} 
+```
 
 ### Stream Operation - Map + Filter + Reduce Pattern
 
@@ -2354,25 +2364,29 @@ Vantagens do Short Circuit:
 Essas operações são eficientes, pois evitam a avaliação desnecessária de expressões quando o resultado já pode ser
 determinado pela primeira condição.
 
-
 Aqui está um exemplo de trecho para um README explicando o código fornecido:
 
 ---
 
 ## Exemplos de Operações com Streams: `Stream.of()`, `Stream.iterate()` e `Stream.generate()`
 
-Este exemplo demonstra como criar e manipular Streams em Java utilizando três métodos principais: `Stream.of()`, `Stream.iterate()` e `Stream.generate()`.
+Este exemplo demonstra como criar e manipular Streams em Java utilizando três métodos principais: `Stream.of()`,
+`Stream.iterate()` e `Stream.generate()`.
 
 ### 1. **Usando `Stream.of()`**
 
-O método `Stream.of()` é usado para criar um stream de elementos específicos fornecidos diretamente. Neste exemplo, criamos um stream com três strings e imprimimos cada uma delas.
+O método `Stream.of()` é usado para criar um stream de elementos específicos fornecidos diretamente. Neste exemplo,
+criamos um stream com três strings e imprimimos cada uma delas.
 
 ```java
 Stream<String> stringStream = Stream.of("adam", "dan", "Julie");
-stringStream.forEach(System.out::println);
+stringStream.
+
+forEach(System.out::println);
 ```
 
 **Saída esperada:**
+
 ```
 adam
 dan
@@ -2381,15 +2395,20 @@ Julie
 
 ### 2. **Usando `Stream.iterate()`**
 
-O método `Stream.iterate()` gera uma sequência de elementos a partir de um valor inicial, aplicando uma função recursiva. No exemplo, geramos uma sequência de números que são multiplicados por 2 a cada iteração, limitando a sequência a 5 elementos.
+O método `Stream.iterate()` gera uma sequência de elementos a partir de um valor inicial, aplicando uma função
+recursiva. No exemplo, geramos uma sequência de números que são multiplicados por 2 a cada iteração, limitando a
+sequência a 5 elementos.
 
 ```java
-Stream.iterate(1, value -> value * 2)
-      .limit(5)
-      .forEach(System.out::println);
+Stream.iterate(1,value ->value *2).
+
+limit(5).
+
+forEach(System.out::println);
 ```
 
 **Saída esperada:**
+
 ```
 1
 2
@@ -2400,56 +2419,175 @@ Stream.iterate(1, value -> value * 2)
 
 ### 3. **Usando `Stream.generate()`**
 
-O método `Stream.generate()` cria um stream a partir de um gerador, que é uma função que retorna um novo valor a cada chamada. Neste exemplo, usamos um `Supplier` para gerar números aleatórios.
+O método `Stream.generate()` cria um stream a partir de um gerador, que é uma função que retorna um novo valor a cada
+chamada. Neste exemplo, usamos um `Supplier` para gerar números aleatórios.
 
 ```java
 Supplier<Integer> integerSupplier = new Random()::nextInt;
-Stream.generate(integerSupplier)
-      .limit(5)
-      .forEach(System.out::println);
+Stream.
+
+generate(integerSupplier)
+      .
+
+limit(5)
+      .
+
+forEach(System.out::println);
 ```
 
 **Saída esperada (valores aleatórios):**
+
 ```
 12093
 4821
 28374
 9842
 19402
-```
-
-### Conclusão
+``` 
 
 - **`Stream.of()`**: Cria um stream a partir de elementos específicos.
 - **`Stream.iterate()`**: Cria uma sequência de elementos com base em uma função recursiva e um valor inicial.
-- **`Stream.generate()`**: Cria um stream com base em um gerador de valores, frequentemente usado para gerar dados aleatórios ou ilimitados.
+- **`Stream.generate()`**: Cria um stream com base em um gerador de valores, frequentemente usado para gerar dados
+  aleatórios ou ilimitados.
 
+## Introdução à API de Streams Numéricas
 
+`IntStream`, `LongStream`, `DoubleStream`: Essas classes são streams especializadas para valores primitivos, evitando o
+uso de
+objetos (e, consequentemente, evitando o custo de autoboxing/unboxing). Elas têm métodos como `sum()`, `average()`,
+` max()`,
+`min()`, etc., que permitem operações eficientes em números primitivos.
+Utilizadas para representar `valores primitivos` em uma stream
 
+### IntStream
 
+1. Uso de IntStream:
 
+```java
+package com.technical.numericstreams;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
+public class NumericStreamsExample {
 
+    // Método que soma números de uma lista usando reduce()
+    public static int sumOfNNumbers(List<Integer> integerList) {
+        return integerList.stream()
+                .reduce(0, (firstElement, secondElement) -> firstElement + secondElement); // Converte Integer para int
 
+        // .reduce(Integer::sum); // Uso do método estático Integer.sum
+        // .reduce((firstElement, secondElement) -> Integer.sum(firstElement, secondElement)); // Alternativa com Integer.sum
+    }
 
+    // Método que soma números usando IntStream
+    public static int sumOfNNumbersIntStream() {
+        return IntStream.rangeClosed(1, 6)  // Gera números de 1 a 6
+                .sum();  // Soma todos os números no stream
+    }
 
+    public static void main(String[] args) {
+        List<Integer> integerList = Arrays.asList(1, 2, 3, 4, 5, 6);
 
+        // Exibindo o resultado da soma da lista
+        System.out.println(sumOfNNumbers(integerList));
 
+        // Exibindo o resultado da soma utilizando IntStream
+        System.out.println(sumOfNNumbersIntStream());
+    }
+}
+```
 
+* Quando lidamos lidamos com números inteiros e precisamos de operações de `stream`, como soma, contagem ou qualquer
+  outra
+  operação que envolva números primitivos, usamos `streams` numéricos (`IntStream`, `LongStream`, `DoubleStream`), que
+  são
+  especializados para esses tipos
+* O `IntStream` é mais eficiente do que usar um `Stream<Integer>` pois ele lida diretamente com os valores primitivos,
+  evitandoo o overhead de autoboxing e unboxing (a conversão entre tipos primitivos e objetos)
 
+2. Método `sumOfNNumbers(List<Integer> integerList)`:
 
+Este método utiliza o `reduce()` para somar todos os números de uma lista de inteiros. O `reduce()` é uma operação que
+recebe dois parâmetros (o primeiro e o segundo elemento) e retorna um valor acumulado, que neste caso é a soma dos
+elementos.
+A diferença entre `Integer::sum` (comentado) e o lambda `(firstElement, secondElement) -> firstElement + secondElement`
+é
+que `Integer::sum` é um método estático que também soma dois inteiros. Como o retorno de `reduce()` em `Stream<Integer>`
+é
+`Optional<Integer`>, você precisa garantir que o tipo retornado seja adequado (como no código fornecido, que já retorna
+um
+valor int).
 
+3. Método `sumOfNNumbersIntStream()`:
 
+O `IntStream.rangeClosed(1, 6)` gera uma sequência de números inteiros de 1 a 6. Usamos o sum() diretamente no IntStream
+para calcular a soma desses números de maneira simples e eficiente.
 
+### .range(int x, int y), rangeClose(int x, int y), count(), foreach()
 
+#### `IntStream.range(x, y)`:
 
+Gera um stream de inteiros de` x até y-1` (o limite superior não é incluído).
+Exemplo: `IntStream.range(1, 50)` cria um stream com os números de 1 até 49.
 
+#### `IntStream.rangeClosed(x, y)`:
 
+Gera um stream de inteiros de x até y (o limite superior é incluído).
+Exemplo: IntStream.rangeClosed(1, 50) cria um stream com os números de 1 até 50.
 
+### Contagem de Elementos no Stream
 
+`count()`: Esse método retorna o número de elementos presentes na stream. No caso, ele conta quantos números estão no
+intervalo definido.
+Para `IntStream.range(1, 50)`, o resultado será 49 (pois o intervalo vai de 1 até 49).
+Para `IntStream.rangeClosed(1, 50)`, o resultado será 50 (pois o intervalo vai de 1 até 50, incluindo o 50).
 
+* DoubleStram Não suporta ...
+IntStream.range(1,50).asDoubleStream().forEach((value)-> sout value + " ," )
 
+### Funções de agregação
+
+#### sum
+A função `sum` realiza a soma de todos os elementos presentes em uma `IntStream`. É útil para calcular o total de um intervalo de números ou somar valores de uma coleção. Internamente, o método itera sobre os elementos da stream e acumula o valor total de forma eficiente.
+
+- **Uso comum**: Quando precisamos calcular somatórios em intervalos ou listas de números inteiros.
+- **Performance**: Otimizada para streams numéricas, evitando o overhead de autoboxing presente em streams genéricas.
+
+#### max
+A função `max` identifica o maior valor presente em uma `IntStream`. O resultado é retornado como um `OptionalInt`, pois pode não haver valores na stream para calcular o máximo (por exemplo, em uma stream vazia).
+
+- **Definição**: Encontra o maior valor comparando todos os elementos da stream.
+- **Uso comum**: Determinar o valor máximo em intervalos de números ou em streams filtradas.
+- **Tratamento de ausência de valores**: Como o retorno é um `OptionalInt`, é necessário verificar se o valor está presente com `isPresent()` antes de acessá-lo.
+
+#### min
+A função `min` localiza o menor valor em uma `IntStream`. Assim como `max`, o resultado é retornado como um `OptionalInt`, garantindo segurança caso a stream esteja vazia.
+
+- **Definição**: Compara todos os elementos da stream para encontrar o menor valor.
+- **Uso comum**: Identificar o menor número em coleções ou intervalos numéricos.
+- **Tratamento de ausência de valores**: O uso de `OptionalInt` garante que o código não gere exceções se a stream for vazia.
+
+#### average
+A função `average` calcula a média aritmética dos valores presentes em uma `IntStream`. O resultado é encapsulado em um `OptionalDouble`, já que pode não haver valores na stream para calcular a média.
+
+- **Definição**: Soma todos os elementos e divide pelo total de elementos presentes.
+- **Uso comum**: Calcular médias em séries de dados numéricos, como notas ou medidas.
+- **Tratamento de ausência de valores**: Assim como `max` e `min`, o retorno é seguro com `OptionalDouble`, sendo necessário verificar a presença do valor antes de utilizá-lo.
+
+### Observações Gerais
+- Todas essas funções são altamente otimizadas para trabalhar com streams numéricas, reduzindo o overhead associado a operações em streams de objetos.
+- É importante sempre tratar os valores retornados por `Optional` para evitar comportamentos inesperados, especialmente em casos de streams vazias.
+
+### Boxing() and Unboxing()
+1. boxing(): Converte um tipo primitivo em seus equivalente `class wrapper`
+   2. Ex:
+      3. Converter um `int` para `Integer`
+4. unboxing(): Converte um tipo `Wrapper class` em seu primitivo
+   5. Ex:
+      6. Converter um `Integer`(wrapper) para `int`(primitivo)
 
 # Comparação: Collections vs. Streams
 
@@ -2467,7 +2605,6 @@ Stream.generate(integerSupplier)
    necessário popular a coleção antes de manipulá-la.
 4. **Iteração múltipla**: É possível iterar sobre os elementos "n" vezes.
 5. **Iteração externa**: A responsabilidade pela iteração recai no código do cliente.
-
 
 ---
 
